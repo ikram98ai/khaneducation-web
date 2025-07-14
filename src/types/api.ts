@@ -30,7 +30,7 @@ export interface Subject {
 export interface Lesson {
   id: string;
   instructor_id: string;
-  subjectId: string;
+  subject_id: string;
   title: string;
   content: string;
   status: "VE" | "DR";

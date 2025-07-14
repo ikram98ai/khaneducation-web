@@ -471,7 +471,7 @@ export const useAdminDashboard = () => {
   });
 };
 
-export const useAdminLessons = (subjectId?: string, params?: { skip?: number; limit?: number }) => {
+export const useAdminLessons = (subjectId: string, params?: { skip?: number; limit?: number }) => {
   const { profile } = useAuthStore();
   const isAdmin = profile?.user?.role === 'admin';
 

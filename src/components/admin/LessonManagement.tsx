@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -74,6 +74,23 @@ export const LessonManagement = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const {
+    data: subjects,
+    isLoading: isLoadingSubjects,
+    error: subjectsError,
+  } = useAdminSubjects();
+  const {
+    data: lessons,
+    isLoading: isLoadingLessons,
+    error: lessonsError,
+  } = useAdminLessons(selectedSubject);
+
+  useEffect(() => {
+    if (subjects && subjects.length > 0 && selectedSubject === "") {
+      setSelectedSubject(subjects[0].id);
+    }
+  }, [subjects, selectedSubject]);
+
+  const {
     register,
     handleSubmit,
     reset,
@@ -83,17 +100,6 @@ export const LessonManagement = () => {
     resolver: zodResolver(lessonSchema),
   });
 
-  const {
-    data: subjects,
-    isLoading: isLoadingSubjects,
-    error: subjectsError,
-  } = useAdminSubjects();
-  const {
-    data: lessons,
-    isLoading: isLoadingLessons,
-    error: lessonsError,
-  } = useAdminLessons(selectedSubject === "" ? undefined : selectedSubject);
-
   const createLessonMutation = useCreateAdminLesson();
   const updateLessonMutation = useUpdateAdminLesson();
   const deleteLessonMutation = useDeleteAdminLesson();
@@ -102,7 +108,7 @@ export const LessonManagement = () => {
     lessons?.filter(
       (lesson) =>
         lesson.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
-        (selectedSubject === "" || lesson.subjectId === selectedSubject)
+        (selectedSubject === "" || lesson.subject_id === selectedSubject)
     ) || [];
 
   const handleCreateLesson = async (data: LessonFormData) => {
@@ -122,7 +128,7 @@ export const LessonManagement = () => {
     setEditingLesson(lesson);
     setValue("title", lesson.title);
     setValue("content", lesson.content);
-    setValue("subjectId", lesson.subjectId);
+    setValue("subjectId", lesson.subject_id);
     setIsEditModalOpen(true);
   };
 
@@ -134,7 +140,7 @@ export const LessonManagement = () => {
         lessonData: {
           title: data.title,
           content: data.content,
-          subjectId: data.subjectId,
+          subject_id: data.subjectId,
         },
       });
       setIsEditModalOpen(false);
@@ -305,7 +311,7 @@ export const LessonManagement = () => {
               <Label htmlFor="subjectId">Subject</Label>
               <Select
                 onValueChange={(value) => setValue("subjectId", value)}
-                value={editingLesson?.subjectId}
+                value={editingLesson?.subject_id}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select a subject" />
@@ -401,14 +407,13 @@ export const LessonManagement = () => {
             <SelectValue placeholder="Filter by subject" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Subjects</SelectItem>
             {subjects
               ?.filter(
                 (subject) => subject.id !== undefined && subject.id !== ""
               )
               .map((subject) => (
                 <SelectItem key={subject.id} value={subject.id}>
-                  {subject.name}
+                  {subject.name} (Grade {subject.grade_level})
                 </SelectItem>
               ))}
           </SelectContent>
@@ -452,8 +457,8 @@ export const LessonManagement = () => {
                   </TableCell>
                   <TableCell>
                     <Badge variant="outline">
-                      {subjects?.find((s) => s.id === lesson.subjectId)?.name ||
-                        "N/A"}
+                      {subjects?.find((s) => s.id === lesson.subject_id)
+                        ?.name || "N/A"}
                     </Badge>
                   </TableCell>
                   <TableCell>
@@ -500,7 +505,12 @@ export const LessonManagement = () => {
               {filteredLessons.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={6} className="text-center py-8">
-                    No lessons found
+                    {selectedSubject && selectedSubject !== ""
+                      ? `No lessons found for ${
+                          subjects?.find((s) => s.id === selectedSubject)
+                            ?.name || "this subject"
+                        }.`
+                      : "No lessons found. Select a subject to view lessons, or add a new lesson."}
                   </TableCell>
                 </TableRow>
               )}
