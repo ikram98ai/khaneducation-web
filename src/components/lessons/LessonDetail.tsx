@@ -35,7 +35,7 @@ export const LessonDetail = () => {
     data: lesson,
     isLoading: isLessonLoading,
     isError: isLessonError,
-  } = useLesson(subjectId, lessonId);
+  } = useLesson(lessonId);
 
   const [activeTab, setActiveTab] = useState("content");
   const [quizStarted, setQuizStarted] = useState(false);
@@ -43,8 +43,8 @@ export const LessonDetail = () => {
   const [selectedAnswers, setSelectedAnswers] = useState<Record<number, string>>({});
   const { toast } = useToast();
 
-  const { data: quizzes = [] } = useQuizzes(subject?.id, lesson?.id);
-  const { data: practiceTasks = [] } = usePracticeTasks(subject?.id, lesson?.id);
+  const { data: quizzes = [] } = useQuizzes(lesson?.id);
+  const { data: practiceTasks = [] } = usePracticeTasks(lesson?.id);
   const submitQuizMutation = useSubmitQuiz();
 
   const onBack = () => {
@@ -297,8 +297,7 @@ export const LessonDetail = () => {
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <CardTitle>
-                      Question {currentQuestion + 1} of{" "}
-                      {mockQuiz.questions.length}
+                      Question {currentQuestion + 1} of {mockQuiz.questions.length}
                     </CardTitle>
                     <Progress
                       value={

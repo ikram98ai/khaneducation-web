@@ -139,19 +139,17 @@ export async function getLessons(subjectId: string): Promise<Lesson[]> {
 }
 
 export async function getLesson(
-  subjectId: string,
   lessonId: string
 ): Promise<Lesson> {
-  const response = await api.get(`/subjects/${subjectId}/lessons/${lessonId}/`);
+  const response = await api.get(`lessons/${lessonId}/`);
   return response.data;
 }
 
 export async function getQuizzes(
-  subjectId: string,
   lessonId: string
 ): Promise<Quiz[]> {
   const response = await api.get(
-    `/subjects/${subjectId}/lessons/${lessonId}/quizzes/`
+    `/lessons/${lessonId}/quizzes/`
   );
   return response.data;
 }
@@ -169,11 +167,10 @@ export async function getQuiz(
 
 
 export async function getPracticeTasks(
-  subjectId: string,
   lessonId: string
 ): Promise<PracticeTask[]> {
   const response = await api.get(
-    `/subjects/${subjectId}/lessons/${lessonId}/tasks/`
+    `/lessons/${lessonId}/tasks/`
   );
   return response.data;
 }

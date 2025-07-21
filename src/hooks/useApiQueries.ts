@@ -169,20 +169,20 @@ export const useLessons = (subjectId: string) => {
   });
 };
 
-export const useLesson = (subjectId: string, lessonId: string) => {
+export const useLesson = (lessonId: string) => {
   return useQuery({
-    queryKey: ["lesson", subjectId, lessonId],
-    queryFn: () => getLesson(subjectId, lessonId),
-    enabled: !!subjectId && !!lessonId,
+    queryKey: ["lesson", lessonId],
+    queryFn: () => getLesson(lessonId),
+    enabled: !!lessonId,
   });
 };
 
 // Quiz hooks
-export const useQuizzes = (subjectId: string, lessonId: string) => {
+export const useQuizzes = (lessonId: string) => {
   return useQuery({
-    queryKey: ["quizzes", subjectId, lessonId],
-    queryFn: () => getQuizzes(subjectId, lessonId),
-    enabled: !!subjectId && !!lessonId,
+    queryKey: ["quizzes",  lessonId],
+    queryFn: () => getQuizzes( lessonId),
+    enabled: !!lessonId,
   });
 };
 
@@ -230,11 +230,11 @@ export const useSubmitQuiz = () => {
 };
 
 // Practice tasks
-export const usePracticeTasks = (subjectId: string, lessonId: string) => {
+export const usePracticeTasks = (lessonId: string) => {
   return useQuery({
-    queryKey: ["practice-tasks", subjectId, lessonId],
-    queryFn: () => getPracticeTasks(subjectId, lessonId),
-    enabled: !!subjectId && !!lessonId,
+    queryKey: ["practice-tasks",  lessonId],
+    queryFn: () => getPracticeTasks(lessonId),
+    enabled: !!lessonId,
   });
 };
 
