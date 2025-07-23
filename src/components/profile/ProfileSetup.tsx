@@ -37,7 +37,8 @@ export const ProfileSetup = () => {
 
   // Check if profile already exists and redirect to dashboard
   useEffect(() => {
-    if (existingProfile && existingProfile.student) {
+    console.log("DEBUG: existingProfile, ",existingProfile)
+    if (existingProfile && existingProfile.student_profile) {
       console.log("Profile found, redirecting to dashboard");
       setProfile(existingProfile);
       navigate("/dashboard", { replace: true });

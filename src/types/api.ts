@@ -41,20 +41,21 @@ export interface Lesson {
 }
 
 export interface SubjectDetail extends Subject {
-  lessons?: Lesson[]
+  lessons?: Lesson[];
 }
 
 export interface Question {
   id: string;
   question_text: string;
+  option_a: string;
+  option_b: string;
+  option_c: string;
+  option_d: string;
   correct_answer: string;
 }
 
 export interface Quiz {
   id: string;
-  lesson: string;
-  lesson_title: string;
-  version: number;
   questions: Question[];
   ai_generated: boolean;
   created_at: string;
@@ -65,6 +66,7 @@ export interface PracticeTask {
   lesson: string;
   lesson_title: string;
   content: string;
+  solution: string;
   difficulty: "EA" | "ME" | "HA"; // Easy, Medium, Hard
   ai_generated: boolean;
   created_at: string;
@@ -78,11 +80,10 @@ export interface Student {
 
 export interface StudentProfile {
   user: User;
-  student?: Student;
+  student_profile?: Student;
 }
 
-export interface Enrollment extends Subject{
-
+export interface Enrollment extends Subject {
   enrolled_at: string;
 }
 
