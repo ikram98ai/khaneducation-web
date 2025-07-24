@@ -10,13 +10,11 @@ import {
   getSubject,
   createStudentProfile,
   getStudentProfile,
-  getLessons,
   getLesson,
   getQuizzes,
   getQuiz,
   submitQuiz,
   getPracticeTasks,
-  getEnrollments,
   getStudentDashboard,
   getLanguages,
   getAiAssistance,
@@ -155,20 +153,11 @@ export const useSubject = (id: string) => {
 
 export const useSubjectDetail = (id: string) => {
   return useQuery({
-    queryKey: ["subject", id],
+    queryKey: ["subject-detail", id],
     queryFn: () => getSubjectDetail(id),
     enabled: !!id,
   });
 };
-// Lesson hooks
-export const useLessons = (subjectId: string) => {
-  return useQuery({
-    queryKey: ["lessons", subjectId],
-    queryFn: () => getLessons(subjectId),
-    enabled: !!subjectId,
-  });
-};
-
 export const useLesson = (lessonId: string) => {
   return useQuery({
     queryKey: ["lesson", lessonId],
@@ -187,14 +176,12 @@ export const useQuizzes = (lessonId: string) => {
 };
 
 export const useQuiz = (
-  subjectId: string,
-  lessonId: string,
   quizId: string
 ) => {
   return useQuery({
-    queryKey: ["quiz", subjectId, lessonId, quizId],
-    queryFn: () => getQuiz(subjectId, lessonId, quizId),
-    enabled: !!subjectId && !!lessonId && !!quizId,
+    queryKey: ["quiz", quizId],
+    queryFn: () => getQuiz( quizId),
+    enabled: !!quizId,
   });
 };
 
@@ -238,16 +225,6 @@ export const usePracticeTasks = (lessonId: string) => {
   });
 };
 
-// Enrollment hooks
-export const useEnrollments = () => {
-  const { isAuthenticated } = useAuthStore();
-
-  return useQuery({
-    queryKey: ["enrollments"],
-    queryFn: getEnrollments,
-    enabled: isAuthenticated,
-  });
-};
 
 // Dashboard hooks
 export const useStudentDashboard = () => {

@@ -8,7 +8,7 @@ import {
   useStudentDashboardStatistics,
 } from "@/hooks/useApiQueries";
 import { Link } from "react-router-dom";
-import { Navbar } from "../Navbar";
+import { Navbar } from "../navigation/Navbar";
 import { formatDistanceToNow } from "date-fns";
 import { Skeleton } from "../ui/skeleton";
 
@@ -149,7 +149,7 @@ export const Dashboard = () => {
             style={{ animationDelay: "0.6s" }}
           >
             <h2 className="text-2xl font-bold mb-6">Your Subjects</h2>
-            {enrolledSubjects.map(( subject , index) => (
+            {enrolledSubjects.map((subject, index) => (
               <Link to={`/subjects/${subject.id}`} key={subject.id}>
                 <Card
                   key={subject.id}
@@ -212,14 +212,13 @@ export const Dashboard = () => {
                       style={{ animationDelay: `${1.1 + index * 0.1}s` }}
                     >
                       <div>
-                        <p className="font-medium">
-                          {activity.lesson_title}
-                        </p> 
-                         <p className="text-sm text-muted-foreground">
+                        <p className="font-medium">{activity.lesson_title}</p>
+                        <p className="text-sm text-muted-foreground">
                           Quiz Version: {activity.quiz_version}
                         </p>
                         <p className="text-xs text-muted-foreground">
-                          {formatDistanceToNow(new Date(activity.start_time))} ago
+                          {formatDistanceToNow(new Date(activity.start_time))}{" "}
+                          ago
                         </p>
                       </div>
                       <Badge

@@ -7,14 +7,13 @@ import {
   Quiz,
   PracticeTask,
   StudentProfile,
-  Enrollment,
   QuizAttempt,
   StudentDashboard,
   AdminDashboard,
   AIAssistRequest,
   AIAssistResponse,
   QuizSubmission,
-  StudentDashboardStats,
+  StudentDashboardStats, 
   SubjectDetail,
 } from "@/types/api";
 
@@ -47,8 +46,28 @@ api.interceptors.request.use(
 );
 
 // Authentication APIs
+
+export async function loginUser(
+  email: string,
+  password: string
+): Promise<AuthResponse> {
+  const response = await api.post("/login/", { email, password });
+  localStorage.setItem("accessToken", response.data.access_token);
+  return response.data;
+}
+
 export async function registerUser(userData: Partial<User>): Promise<User> {
   const response = await api.post("/users/", userData);
+  return response.data;
+}
+
+export async function getCurrentUser(): Promise<StudentProfile> {
+  const response = await api.get(`/users/profile/me/`);
+  return response.data;
+}
+
+export async function updateUser(userData: Partial<User>): Promise<User> {
+  const response = await api.put("/users/profile/me/", userData);
   return response.data;
 }
 
@@ -64,36 +83,6 @@ export async function getStudentProfile(): Promise<StudentProfile> {
   const response = await api.get("/users/profile/me/");
   return response.data;
 }
-
-export async function getCurrentUser(): Promise<StudentProfile> {
-  const response = await api.get(`/users/profile/me/`);
-  return response.data;
-}
-
-export async function loginUser(
-  email: string,
-  password: string
-): Promise<AuthResponse> {
-  const response = await api.post("/login/", { email, password });
-  localStorage.setItem("accessToken", response.data.access_token);
-  return response.data;
-}
-
-export async function updateUser(userData: Partial<User>): Promise<User> {
-  const response = await api.put("/users/profile/me/", userData);
-  return response.data;
-}
-
-export async function getStudentDashboard(): Promise<StudentDashboard> {
-  const response = await api.get("/dashboard/student/");
-  return response.data;
-}
-
-export const getStudentDashboardStatistics =
-  async (): Promise<StudentDashboardStats> => {
-    const { data } = await api.get(`/dashboard/student/stats/`);
-    return data;
-  };
 
 
 
@@ -129,19 +118,22 @@ export async function getSubject(id: string): Promise<Subject> {
 }
 
 export async function getSubjectDetail(id: string): Promise<SubjectDetail> {
-  const response = await api.get(`/subjects/${id}/`);
+  const response = await api.get(`/subjects/${id}/details`);
   return response.data;
 }
-
-export async function getLessons(subjectId: string): Promise<Lesson[]> {
-  const response = await api.get(`/subjects/${subjectId}/lessons/`);
-  return response.data;
-}
-
 export async function getLesson(
   lessonId: string
 ): Promise<Lesson> {
   const response = await api.get(`lessons/${lessonId}/`);
+  return response.data;
+}
+
+export async function getPracticeTasks(
+  lessonId: string
+): Promise<PracticeTask[]> {
+  const response = await api.get(
+    `/lessons/${lessonId}/tasks/`
+  );
   return response.data;
 }
 
@@ -154,45 +146,40 @@ export async function getQuizzes(
   return response.data;
 }
 
+
+
+// Quiz APIs
+
 export async function getQuiz(
-  subjectId: string,
-  lessonId: string,
   quizId: string
 ): Promise<Quiz> {
   const response = await api.get(
-    `/subjects/${subjectId}/lessons/${lessonId}/quizzes/${quizId}/`
+    `/quizzes/${quizId}/`
   );
   return response.data;
 }
 
-
-export async function getPracticeTasks(
-  lessonId: string
-): Promise<PracticeTask[]> {
-  const response = await api.get(
-    `/lessons/${lessonId}/tasks/`
-  );
-  return response.data;
-}
-
-
-// Enrollment APIs
-export async function getEnrollments(): Promise<Enrollment[]> {
-  const response = await api.get("/student/enrollments/");
-  return response.data;
-}
-
-// Quiz Submission APIs
 export async function submitQuiz(submission: Partial<QuizSubmission>): Promise<{
   attempt: QuizAttempt;
   ai_feedback: string;
   regenerated_quiz?: Quiz;
 }> {
-  const response = await api.post(`/quizzes/submit`, submission);
+  const response = await api.post(`/quizzes/submit/`, submission);
   return response.data;
 }
 
 // Dashboard APIs
+
+export async function getStudentDashboard(): Promise<StudentDashboard> {
+  const response = await api.get("/dashboard/student/");
+  return response.data;
+}
+
+export const getStudentDashboardStatistics =
+  async (): Promise<StudentDashboardStats> => {
+    const { data } = await api.get(`/dashboard/student/stats/`);
+    return data;
+  };
 
 export async function getAdminDashboard(): Promise<AdminDashboard> {
   const response = await api.get("/dashboard/admin/");
@@ -260,17 +247,17 @@ export const adminAPI = {
   },
 
   getAdminLesson: async (lessonId: string): Promise<Lesson> => {
-    const response = await api.get(`/admin/lessons/${lessonId}`);
+    const response = await api.get(`/admin/lessons/${lessonId}/`);
     return response.data;
   },
 
   updateAdminLesson: async (lessonId: string, lessonData: Partial<Lesson>): Promise<Lesson> => {
-    const response = await api.put(`/admin/lessons/${lessonId}`, lessonData);
+    const response = await api.put(`/admin/lessons/${lessonId}/`, lessonData);
     return response.data;
   },
 
   deleteAdminLesson: async (lessonId: string): Promise<Lesson> => {
-    const response = await api.delete(`/admin/lessons/${lessonId}`);
+    const response = await api.delete(`/admin/lessons/${lessonId}/`);
     return response.data;
   },
 
