@@ -4,21 +4,28 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, Send, Lightbulb, Brain, Target } from "lucide-react";
+import { useAiAssistance } from "@/hooks/useApiQueries";
 
 interface Message {
   id: string;
   content: string;
-  type: 'user' | 'assistant';
+  type: "user" | "assistant";
   timestamp: Date;
 }
 
-
-export const AIAssistant = ({subject, lesson}:{subject:string, lesson?:string}) => {
+export const AIAssistant = ({
+  subject_id,
+  lesson_id,
+}: {
+  subject_id: string;
+  lesson_id?: string;
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const aiAssistanceMutation = useAiAssistance();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -32,14 +39,17 @@ export const AIAssistant = ({subject, lesson}:{subject:string, lesson?:string}) 
   useEffect(() => {
     if (isOpen && messages.length === 0) {
       const welcomeMessage: Message = {
-        id: '1',
-        content: `Hi! I'm your AI learning assistant. I'm here to help you understand ${subject || 'your lessons'} better. Feel free to ask me questions about the concepts, request explanations, or get study tips!`,
-        type: 'assistant',
-        timestamp: new Date()
+        id: "1",
+        content: `Hi! I'm your AI learning assistant. I'm here to help you understand ${
+          subject_id || "your lessons"
+        } better. Feel free to ask me questions about the concepts, request explanations, or get study tips!`,
+        type: "assistant",
+        timestamp: new Date(),
       };
       setMessages([welcomeMessage]);
     }
-  }, [isOpen, messages.length, subject]);
+    console.log("AIAssistant initialized with subject:", subject_id, "and lesson:", lesson_id);
+  }, [isOpen, messages.length, subject_id]);
 
   const handleSend = async () => {
     if (!input.trim()) return;
@@ -47,40 +57,59 @@ export const AIAssistant = ({subject, lesson}:{subject:string, lesson?:string}) 
     const userMessage: Message = {
       id: Date.now().toString(),
       content: input,
-      type: 'user',
-      timestamp: new Date()
+      type: "user",
+      timestamp: new Date(),
     };
 
-    setMessages(prev => [...prev, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setIsLoading(true);
 
-    // Simulate AI response with contextual learning assistance
-    setTimeout(() => {
-      const responses = [
-        "That's a great question! Let me break this down for you step by step...",
-        "I can help you understand this concept better. Here's a simple way to think about it...",
-        "This is a common area where students get confused. Let me clarify...",
-        "Excellent! You're asking the right questions. Here's what you need to know...",
-        "I can see you're thinking critically about this. Let me provide some additional insight..."
-      ];
+    const requestData = {
+      subject_id: Number(subject_id),
+      lesson_id: Number(lesson_id),
+      query_text: input,
+    };
 
+    try {
+      const response = await aiAssistanceMutation.mutateAsync(requestData);
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
-        content: responses[Math.floor(Math.random() * responses.length)],
-        type: 'assistant',
-        timestamp: new Date()
+        content: response.ai_response, // Assuming the API returns a field named response_text
+        type: "assistant",
+        timestamp: new Date(),
       };
-
-      setMessages(prev => [...prev, assistantMessage]);
+      setMessages((prev) => [...prev, assistantMessage]);
+    } catch (error) {
+      console.error("AI Assistance Error:", error);
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        content: "Oops! Something went wrong. Please try again.",
+        type: "assistant",
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+    } finally {
       setIsLoading(false);
-    }, 1000 + Math.random() * 1000);
+    }
   };
 
   const quickActions = [
-    { icon: Lightbulb, label: "Explain concept", action: "Can you explain this concept in simpler terms?" },
-    { icon: Brain, label: "Study tips", action: "What are some effective study strategies for this topic?" },
-    { icon: Target, label: "Practice problems", action: "Can you give me some practice problems?" }
+    {
+      icon: Lightbulb,
+      label: "Explain concept",
+      action: "Can you explain this concept in simpler terms?",
+    },
+    {
+      icon: Brain,
+      label: "Study tips",
+      action: "What are some effective study strategies for this topic?",
+    },
+    {
+      icon: Target,
+      label: "Practice problems",
+      action: "Can you give me some practice problems?",
+    },
   ];
 
   const handleQuickAction = (action: string) => {
@@ -103,7 +132,7 @@ export const AIAssistant = ({subject, lesson}:{subject:string, lesson?:string}) 
 
   return (
     <Card className="fixed bottom-6 right-6 w-96 h-[500px] z-50 shadow-floating animate-spring-in  bg-white/80 backdrop-blur-xl border-b border-gray-200">
-      <CardHeader className="pb-3">
+      <CardHeader className="pb-1">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-full bg-gradient-primary flex items-center justify-center">
@@ -115,16 +144,16 @@ export const AIAssistant = ({subject, lesson}:{subject:string, lesson?:string}) 
             variant="ghost"
             size="sm"
             onClick={() => setIsOpen(false)}
-            className="h-8 w-8 p-0"
+            className="h-8 w-8 p-0 text-xl"
           >
             ×
           </Button>
         </div>
-        {subject && (
+        {/* {subject_id && (
           <Badge variant="secondary" className="w-fit">
-            {subject} {lesson && `• ${lesson}`}
+            {subject_id} {lesson_id && `• ${lesson_id}`} 
           </Badge>
-        )}
+        )} */}
       </CardHeader>
 
       <CardContent className="flex flex-col h-[380px] p-4">
@@ -133,13 +162,15 @@ export const AIAssistant = ({subject, lesson}:{subject:string, lesson?:string}) 
           {messages.map((message) => (
             <div
               key={message.id}
-              className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
+              className={`flex ${
+                message.type === "user" ? "justify-end" : "justify-start"
+              }`}
             >
               <div
                 className={`max-w-[80%] p-3 rounded-lg text-sm ${
-                  message.type === 'user'
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-surface-elevated border'
+                  message.type === "user"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-surface-elevated border"
                 }`}
               >
                 {message.content}
@@ -151,8 +182,14 @@ export const AIAssistant = ({subject, lesson}:{subject:string, lesson?:string}) 
               <div className="bg-surface-elevated border p-3 rounded-lg">
                 <div className="flex space-x-1">
                   <div className="w-2 h-2 bg-muted-foreground rounded-full animate-pulse"></div>
-                  <div className="w-2 h-2 bg-muted-foreground rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-                  <div className="w-2 h-2 bg-muted-foreground rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+                  <div
+                    className="w-2 h-2 bg-muted-foreground rounded-full animate-pulse"
+                    style={{ animationDelay: "0.2s" }}
+                  ></div>
+                  <div
+                    className="w-2 h-2 bg-muted-foreground rounded-full animate-pulse"
+                    style={{ animationDelay: "0.4s" }}
+                  ></div>
                 </div>
               </div>
             </div>
@@ -182,7 +219,7 @@ export const AIAssistant = ({subject, lesson}:{subject:string, lesson?:string}) 
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask me anything..."
-            onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+            onKeyPress={(e) => e.key === "Enter" && handleSend()}
             className="flex-1"
           />
           <Button

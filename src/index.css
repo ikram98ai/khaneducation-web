@@ -193,8 +193,9 @@
 }
 
 /* Custom scrollbar */
-div::-webkit-scrollbar {
-  width: 6px;
+ div::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
 }
 
 div::-webkit-scrollbar-track {
@@ -203,12 +204,12 @@ div::-webkit-scrollbar-track {
 }
 
 div::-webkit-scrollbar-thumb {
-  background: hsl(215 100% 55%);
+  background: hsl(214, 10%, 47%);
   border-radius: 3px;
 }
 
 div::-webkit-scrollbar-thumb:hover {
-  background: hsl(215 100% 45%);
+  background: hsl(220, 7%, 27%);
 }
 
 /* Ensure text wrapping */

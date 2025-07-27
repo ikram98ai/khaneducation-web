@@ -91,7 +91,7 @@ export interface QuizAttempt {
   id: number;
   student_id?: number;
   quiz_id: number;
-  quiz_version:number
+  quiz_version: number;
   start_time: string;
   lesson_title?: string;
   end_time: string;
@@ -125,12 +125,13 @@ export interface AdminDashboard {
 }
 
 export interface AIAssistRequest {
-  message: string;
-  context: string;
+  subject_id: number;
+  lesson_id?: number;
+  query_text: string;
 }
 
 export interface AIAssistResponse {
-  response: string;
+  ai_response: string;
 }
 
 export interface StudentDashboardStats {
