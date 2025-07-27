@@ -186,3 +186,34 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+.border-l-3 {
+  border-left-width: 3px;
+}
+
+/* Custom scrollbar */
+div::-webkit-scrollbar {
+  width: 6px;
+}
+
+div::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+div::-webkit-scrollbar-thumb {
+  background: hsl(215 100% 55%);
+  border-radius: 3px;
+}
+
+div::-webkit-scrollbar-thumb:hover {
+  background: hsl(215 100% 45%);
+}
+
+/* Ensure text wrapping */
+* {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}

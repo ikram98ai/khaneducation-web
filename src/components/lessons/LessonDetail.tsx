@@ -19,9 +19,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Terminal } from "lucide-react";
 import { AIAssistant } from "../learning/AIAssistant";
+import MarkdownViewer from "../mdviewer/MarkdownViewer";
 
 export const LessonDetail = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { subjectId, lessonId } = useParams();
 
   const {
@@ -42,7 +43,7 @@ export const LessonDetail = () => {
   };
 
   const startQuiz = () => {
-    navigate(`/lessons/${lessonId}/quiz/`, { replace: true })
+    navigate(`/lessons/${lessonId}/quiz/`, { replace: true });
   };
 
   const {
@@ -55,7 +56,6 @@ export const LessonDetail = () => {
     isLoading: isTasksLoading,
     isError: isTasksError,
   } = usePracticeTasks(lesson?.id);
-
 
   if (isSubjectLoading || isLessonLoading) {
     return (
@@ -90,7 +90,7 @@ export const LessonDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-accent/5 to-primary/5">
+    <div className="bg-gradient-to-br from-background via-accent/5 to-primary/5">
       {/* Header */}
       <div className="bg-gradient-primary text-white px-6 py-8">
         <div className="max-w-6xl mx-auto">
@@ -119,20 +119,13 @@ export const LessonDetail = () => {
           </TabsList>
 
           <TabsContent value="content" className="mt-6">
-            <Card className="shadow-soft">
-              <CardHeader>
+            <Card className="shadow-soft text-wrap">
+              <CardHeader >
                 <CardTitle>Lesson Content</CardTitle>
                 <CardDescription>Learn the core concepts</CardDescription>
               </CardHeader>
               <CardContent className="prose max-w-none">
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: lesson.content,
-                  }}
-                />
-                <Button variant="gradient" className="mt-6">
-                  Mark as Complete
-                </Button>
+                <MarkdownViewer markdown={lesson.content} />
               </CardContent>
             </Card>
           </TabsContent>
@@ -146,7 +139,7 @@ export const LessonDetail = () => {
                 <p>Error loading practice problems.</p>
               ) : (
                 practiceTasks.map((task, index) => (
-                  <Card key={task.id} className="shadow-soft">
+                  <Card key={task.id} className="shadow-soft text-wrap">
                     <CardHeader>
                       <div className="flex items-center justify-between">
                         <CardTitle className="text-lg">
@@ -154,16 +147,16 @@ export const LessonDetail = () => {
                         </CardTitle>
                       </div>
                     </CardHeader>
-                    <CardContent>
-                      <p className="mb-4">{task.content}</p>
-                      {/* <details className="cursor-pointer">
+                    <CardContent className="text-wrap">
+                        <MarkdownViewer markdown={task.content} />
+                      <details className="cursor-pointer">
                         <summary className="text-primary hover:underline">
                           Show Solution
                         </summary>
                         <div className="mt-2 p-3 bg-muted/50 rounded">
                           <strong>Solution:</strong> {task.solution}
                         </div>
-                      </details> */}
+                      </details>
                     </CardContent>
                   </Card>
                 ))
@@ -208,17 +201,12 @@ export const LessonDetail = () => {
                             {new Date(attempt.start_time).toLocaleString()}
                           </p>
 
-                          <p
-                            className="text-sm"
-                          >
+                          <p className="text-sm">
                             Quiz Version • {attempt.quiz_version}
-
-                          </p> 
+                          </p>
                           <p
                             className={`text-sm ${
-                              attempt.passed
-                                ? "text-green-500"
-                                : "text-red-500"
+                              attempt.passed ? "text-green-500" : "text-red-500"
                             }`}
                           >
                             {attempt.passed ? "Passed" : "Failed"} • Score:{" "}
@@ -241,5 +229,5 @@ export const LessonDetail = () => {
       </div>
       <AIAssistant subject={subject.name} lesson={lesson.title} />
     </div>
-  )
-}
+  );
+};
