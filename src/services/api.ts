@@ -165,7 +165,7 @@ export async function submitQuiz(submission: Partial<QuizSubmission>): Promise<{
   ai_feedback: string;
   regenerated_quiz?: Quiz;
 }> {
-  const response = await api.post(`/quizzes/submit/`, submission);
+  const response = await api.post(`/quizzes/${submission.quiz_id}/submit/`, submission.responses);
   return response.data;
 }
 

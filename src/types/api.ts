@@ -45,18 +45,18 @@ export interface SubjectDetail extends Subject {
 }
 
 export interface Question {
-  id: string;
+  question_id: string;
   question_text: string;
-  option_a: string;
-  option_b: string;
-  option_c: string;
-  option_d: string;
+  question_type: string;
+  options?: string[];
   correct_answer: string;
+  points?: number;
 }
 
 export interface Quiz {
   id: string;
-  questions: Question[];
+  lesson_title: string;
+  quiz_questions: Question[];
   ai_generated: boolean;
   created_at: string;
 }
@@ -102,7 +102,7 @@ export interface QuizAttempt {
 
 export interface QuizResponse {
   question_id: string;
-  answer: string;
+  student_answer: string;
 }
 
 export interface QuizSubmission {

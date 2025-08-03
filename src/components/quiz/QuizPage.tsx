@@ -8,10 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import {
-  useQuiz,
-  useSubmitQuiz,
-} from "@/hooks/useApiQueries";
+import { useQuiz, useSubmitQuiz } from "@/hooks/useApiQueries";
 import { useParams } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -38,21 +35,21 @@ export const QuizPage = () => {
 
   const submitQuizMutation = useSubmitQuiz();
 
-  const handleQuizAnswer = (questionId: string, answer: string) => {
+  const handleQuizAnswer = (questionId: string, student_answer: string) => {
     setSelectedAnswers((prev) => ({
       ...prev,
-      [questionId]: answer,
+      [questionId]: student_answer,
     }));
   };
 
   const nextQuestion = () => {
-    if (currentQuestion < quiz.questions.length - 1) {
+    if (currentQuestion < quiz.quiz_questions.length - 1) {
       setCurrentQuestion((prev) => prev + 1);
     } else {
       const responses = Object.entries(selectedAnswers).map(
-        ([question_id, answer]) => ({
+        ([question_id, student_answer]) => ({
           question_id,
-          answer,
+          student_answer,
         })
       );
 
@@ -123,118 +120,120 @@ export const QuizPage = () => {
       </div> */}
 
       <div className="max-w-4xl mx-auto px-6 py-8">
-          {isQuizLoading ? (
-            <p>Loading quiz...</p>
-          ) : isQuizError ? (
-            <p>Error loading quiz.</p>
-          ) : !quiz ? (
-            <p>No quiz available for this lesson.</p>
-          ) : !quizStarted ? (
-            <Card className="shadow-soft">
-              <CardHeader>
-                <CardTitle>Knowledge Check Quiz</CardTitle>
-                <CardDescription>
-                  Test your understanding with {quiz.questions.length} questions
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-center gap-4">
-                    <div className="text-2xl">🧠</div>
-                    <div>
-                      <p className="font-medium">
-                        Ready to test your knowledge?
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        You need 70% or higher to pass
-                      </p>
-                    </div>
+        {isQuizLoading ? (
+          <p>Loading quiz...</p>
+        ) : isQuizError ? (
+          <p>Error loading quiz.</p>
+        ) : !quiz ? (
+          <p>No quiz available for this lesson.</p>
+        ) : !quizStarted ? (
+          <Card className="shadow-soft">
+            <CardHeader>
+              <CardTitle>Knowledge Check Quiz</CardTitle>
+              <CardDescription>
+                Test your understanding with {quiz.quiz_questions.length}{" "}
+                questions
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="flex items-center gap-4">
+                  <div className="text-2xl">🧠</div>
+                  <div>
+                    <p className="font-medium">Ready to test your knowledge?</p>
+                    <p className="text-sm text-muted-foreground">
+                      You need 70% or higher to pass
+                    </p>
                   </div>
-                  <Button
-                    variant="gradient"
-                    onClick={() => setQuizStarted(true)}
-                    size="lg"
-                  >
-                    Start Quiz
-                  </Button>
                 </div>
-              </CardContent>
-            </Card>
-          ) : (
-            <Card className="shadow-soft">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle>
-                    Question {currentQuestion + 1} of {quiz.questions.length}
-                  </CardTitle>
-                  <Progress
-                    value={
-                      ((currentQuestion + 1) / quiz.questions.length) * 100
-                    }
-                    className="w-32"
-                  />
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  <h3 className="text-lg font-medium">
-                    {quiz.questions[currentQuestion].question_text}
-                  </h3>
+                <Button
+                  variant="gradient"
+                  onClick={() => setQuizStarted(true)}
+                  size="lg"
+                >
+                  Start Quiz
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        ) : quiz.quiz_questions.length == 0 ? (
+          <p> There are no questions for this quiz</p>
+        ) : (
+          <Card className="shadow-soft">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle>
+                  Question {currentQuestion + 1} of {quiz.quiz_questions.length}
+                </CardTitle>
+                <Progress
+                  value={
+                    ((currentQuestion + 1) / quiz.quiz_questions.length) * 100
+                  }
+                  className="w-32"
+                />
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-6">
+                <h3 className="text-lg font-medium">
+                  {quiz.quiz_questions[currentQuestion].question_text}
+                </h3>
 
-                  <div className="space-y-3">
-                    {[
-                      quiz.questions[currentQuestion].option_a,
-                      quiz.questions[currentQuestion].option_b,
-                      quiz.questions[currentQuestion].option_c,
-                      quiz.questions[currentQuestion].option_d,
-                    ].map((option, index) => (
-                      <label
-                        key={index}
-                        className={`flex items-center p-3 rounded-lg border cursor-pointer transition-all duration-200 ${
-                          selectedAnswers[
-                            quiz.questions[currentQuestion].id
-                          ] === option
-                            ? "border-primary bg-primary/10"
-                            : "border-border hover:bg-muted/50"
-                        }`}
-                      >
-                        <input
-                          type="radio"
-                          name={`question-${currentQuestion}`}
-                          value={option}
-                          checked={
+                <div className="space-y-3">
+                  {quiz.quiz_questions[currentQuestion].options &&
+                    quiz.quiz_questions[currentQuestion].options.map(
+                      (option, index) => (
+                        <label
+                          key={index}
+                          className={`flex items-center p-3 rounded-lg border cursor-pointer transition-all duration-200 ${
                             selectedAnswers[
-                              quiz.questions[currentQuestion].id
+                              quiz.quiz_questions[currentQuestion].question_id
                             ] === option
-                          }
-                          onChange={() =>
-                            handleQuizAnswer(
-                              quiz.questions[currentQuestion].id,
-                              option
-                            )
-                          }
-                          className="mr-3"
-                        />
-                        <span>{option}</span>
-                      </label>
-                    ))}
-                  </div>
-
-                  <Button
-                    onClick={nextQuestion}
-                    disabled={
-                      !selectedAnswers[quiz.questions[currentQuestion].id]
-                    }
-                    className="w-full"
-                  >
-                    {currentQuestion === quiz.questions.length - 1
-                      ? "Finish Quiz"
-                      : "Next Question"}
-                  </Button>
+                              ? "border-primary bg-primary/10"
+                              : "border-border hover:bg-muted/50"
+                          }`}
+                        >
+                          <input
+                            type="radio"
+                            name={`question-${currentQuestion}`}
+                            value={option}
+                            checked={
+                              selectedAnswers[
+                                quiz.quiz_questions[currentQuestion].question_id
+                              ] === option
+                            }
+                            onChange={() =>
+                              handleQuizAnswer(
+                                quiz.quiz_questions[currentQuestion]
+                                  .question_id,
+                                option
+                              )
+                            }
+                            className="mr-3"
+                          />
+                          <span>{option}</span>
+                        </label>
+                      )
+                    )}
                 </div>
-              </CardContent>
-            </Card>
-          )}
+
+                <Button
+                  onClick={nextQuestion}
+                  disabled={
+                    !selectedAnswers[
+                      quiz.quiz_questions[currentQuestion].question_id
+                    ]
+                  }
+                  className="w-full"
+                >
+                  {currentQuestion === quiz.quiz_questions.length - 1
+                    ? "Finish Quiz"
+                    : "Next Question"}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   );
