@@ -66,8 +66,8 @@ export const AIAssistant = ({
     setIsLoading(true);
 
     const requestData = {
-      subject_id: Number(subject_id),
-      lesson_id: Number(lesson_id),
+      subject_id: subject_id,
+      lesson_id: lesson_id,
       query_text: input,
     };
 

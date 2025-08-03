@@ -73,7 +73,7 @@ export interface PracticeTask {
 }
 
 export interface Student {
-  id?: number;
+  id?: string;
   language: string;
   current_grade: string;
 }
@@ -88,9 +88,9 @@ export interface Enrollment extends Subject {
 }
 
 export interface QuizAttempt {
-  id: number;
-  student_id?: number;
-  quiz_id: number;
+  id: string;
+  student_id?: string;
+  quiz_id: string;
   quiz_version: number;
   start_time: string;
   lesson_title?: string;
@@ -125,8 +125,8 @@ export interface AdminDashboard {
 }
 
 export interface AIAssistRequest {
-  subject_id: number;
-  lesson_id?: number;
+  subject_id: string;
+  lesson_id?: string;
   query_text: string;
 }
 
