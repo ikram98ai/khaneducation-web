@@ -11,6 +11,7 @@ import {
 import Header from "@/components/navigation/Header";
 import Footer from "@/components/navigation/Footer";
 import { Link } from "react-router-dom";
+import AITutorQuiz from '@/components/quiz/AITutorQuiz';
 
 export default function Index() {
   const features = [
@@ -103,60 +104,7 @@ export default function Index() {
             </div>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="relative"
-          >
-            <div className="bg-white/80 backdrop-blur-xl border border-white/40 rounded-3xl shadow-xl p-8">
-              <div className="flex gap-2 mb-6">
-                <div className="bg-indigo-600 w-3 h-3 rounded-full"></div>
-                <div className="bg-gray-300 w-3 h-3 rounded-full"></div>
-                <div className="bg-gray-300 w-3 h-3 rounded-full"></div>
-              </div>
-
-              <div className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl p-6 text-white">
-                <h3 className="text-xl font-bold mb-2">Algebra Mastery</h3>
-                <p className="text-indigo-100 mb-4">
-                  Solving Quadratic Equations
-                </p>
-
-                <div className="bg-indigo-400/20 rounded-xl p-4 mb-4">
-                  <p className="text-sm font-medium">Question 3 of 5</p>
-                  <p className="mt-2">Solve for x: 2x² + 5x - 3 = 0</p>
-                </div>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="bg-white/20 rounded-xl p-3 text-center cursor-pointer hover:bg-white/30 transition-colors">
-                    x = 0.5, x = -3
-                  </div>
-                  <div className="bg-white/20 rounded-xl p-3 text-center cursor-pointer hover:bg-white/30 transition-colors">
-                    x = -0.5, x = 3
-                  </div>
-                  <div className="bg-white/20 rounded-xl p-3 text-center cursor-pointer hover:bg-white/30 transition-colors">
-                    x = 1.5, x = -1
-                  </div>
-                  <div className="bg-white/20 rounded-xl p-3 text-center cursor-pointer hover:bg-white/30 transition-colors">
-                    x = -1.5, x = 1
-                  </div>
-                </div>
-
-                <div className="mt-6 flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-indigo-200">
-                    <Bot size={18} />
-                    <span>AI Tutor Available</span>
-                  </div>
-                  <button className="bg-white text-indigo-600 py-2 px-4 rounded-xl text-sm font-semibold hover:bg-gray-100 transition-colors">
-                    Submit Answer
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-yellow-400 rounded-full opacity-20 blur-3xl"></div>
-            <div className="absolute -top-6 -right-6 w-32 h-32 bg-indigo-500 rounded-full opacity-20 blur-3xl"></div>
-          </motion.div>
+          <AITutorQuiz />
         </div>
       </div>
 
