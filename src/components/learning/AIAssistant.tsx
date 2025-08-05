@@ -122,7 +122,7 @@ export const AIAssistant = ({
         onClick={() => setIsOpen(true)}
         variant="floating"
         size="lg"
-        className="fixed bottom-6 right-6 z-50 shadow-floating animate-float"
+        className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-50 shadow-floating animate-float"
       >
         <Sparkles className="h-5 w-5 mr-2" />
         AI Assistant
@@ -131,8 +131,8 @@ export const AIAssistant = ({
   }
 
   return (
-    <Card className="fixed bottom-6 right-6 w-96 h-[500px] z-50 shadow-floating animate-spring-in  bg-white/80 backdrop-blur-xl border-b border-gray-200">
-      <CardHeader className="pb-1">
+    <Card className="fixed bottom-0 right-0 w-full h-full md:w-[440px] md:h-[600px] lg:w-2/4 lg:h-2/3 md:bottom-6 md:right-6 z-50 shadow-floating animate-spring-in bg-white/80 backdrop-blur-xl border-b border-gray-200 md:rounded-lg">
+      <CardHeader className="pb-1 pt-4 px-4 md:pt-6 md:px-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-full bg-gradient-primary flex items-center justify-center">
@@ -149,14 +149,9 @@ export const AIAssistant = ({
             ×
           </Button>
         </div>
-        {/* {subject_id && (
-          <Badge variant="secondary" className="w-fit">
-            {subject_id} {lesson_id && `• ${lesson_id}`} 
-          </Badge>
-        )} */}
       </CardHeader>
 
-      <CardContent className="flex flex-col h-[380px] p-4">
+      <CardContent className="flex flex-col h-[calc(100%-60px)] p-4">
         {/* Messages */}
         <div className="flex-1 overflow-y-auto space-y-3 mb-4">
           {messages.map((message) => (
@@ -167,7 +162,7 @@ export const AIAssistant = ({
               }`}
             >
               <div
-                className={`max-w-[80%] p-3 rounded-lg text-sm ${
+                className={`max-w-[85%] p-3 rounded-lg text-sm md:max-w-[80%] ${
                   message.type === "user"
                     ? "bg-primary text-primary-foreground"
                     : "bg-surface-elevated border"
@@ -197,38 +192,41 @@ export const AIAssistant = ({
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Quick Actions */}
-        <div className="flex gap-1 mb-3 overflow-x-auto">
-          {quickActions.map((action, index) => (
-            <Button
-              key={index}
-              variant="outline"
-              size="sm"
-              onClick={() => handleQuickAction(action.action)}
-              className="flex-1 text-xs"
-            >
-              <action.icon className="h-3 w-3 mr-1" />
-              {action.label}
-            </Button>
-          ))}
-        </div>
+        {/* Input Area */}
+        <div className="mt-auto">
+          {/* Quick Actions */}
+          <div className="flex gap-1 mb-3 overflow-x-auto">
+            {quickActions.map((action, index) => (
+              <Button
+                key={index}
+                variant="outline"
+                size="sm"
+                onClick={() => handleQuickAction(action.action)}
+                className="flex-1 text-xs"
+              >
+                <action.icon className="h-3 w-3 mr-1" />
+                {action.label}
+              </Button>
+            ))}
+          </div>
 
-        {/* Input */}
-        <div className="flex gap-2">
-          <Input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask me anything..."
-            onKeyPress={(e) => e.key === "Enter" && handleSend()}
-            className="flex-1"
-          />
-          <Button
-            onClick={handleSend}
-            disabled={!input.trim() || isLoading}
-            size="sm"
-          >
-            <Send className="h-4 w-4" />
-          </Button>
+          {/* Input */}
+          <div className="flex gap-2">
+            <Input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Ask me anything..."
+              onKeyPress={(e) => e.key === "Enter" && handleSend()}
+              className="flex-1"
+            />
+            <Button
+              onClick={handleSend}
+              disabled={!input.trim() || isLoading}
+              size="sm"
+            >
+              <Send className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
       </CardContent>
     </Card>
