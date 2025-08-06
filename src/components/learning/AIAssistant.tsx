@@ -15,10 +15,14 @@ interface Message {
 
 export const AIAssistant = ({
   subject_id,
+  subject,
   lesson_id,
+  lesson
 }: {
   subject_id: string;
+  subject: string;
   lesson_id?: string;
+  lesson?: string;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -40,15 +44,13 @@ export const AIAssistant = ({
     if (isOpen && messages.length === 0) {
       const welcomeMessage: Message = {
         id: "1",
-        content: `Hi! I'm your AI learning assistant. I'm here to help you understand ${
-          subject_id || "your lessons"
-        } better. Feel free to ask me questions about the concepts, request explanations, or get study tips!`,
+        content: `Hi! I'm your AI learning assistant. I'm here to help you understand ${subject} ${lesson && "• " + lesson} better. 
+        Feel free to ask me questions about the concepts, request explanations, or get study tips!`,
         type: "assistant",
         timestamp: new Date(),
       };
       setMessages([welcomeMessage]);
     }
-    console.log("AIAssistant initialized with subject:", subject_id, "and lesson:", lesson_id);
   }, [isOpen, messages.length, subject_id]);
 
   const handleSend = async () => {
@@ -129,106 +131,128 @@ export const AIAssistant = ({
       </Button>
     );
   }
-
-  return (
-    <Card className="fixed bottom-0 right-0 w-full h-full md:w-[440px] md:h-[600px] lg:w-2/4 lg:h-2/3 md:bottom-6 md:right-6 z-50 shadow-floating animate-spring-in bg-white/80 backdrop-blur-xl border-b border-gray-200 md:rounded-lg">
-      <CardHeader className="pb-1 pt-4 px-4 md:pt-6 md:px-6">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-gradient-primary flex items-center justify-center">
-              <Sparkles className="h-4 w-4 text-white" />
-            </div>
-            <CardTitle className="text-lg">AI Assistant</CardTitle>
-          </div>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setIsOpen(false)}
-            className="h-8 w-8 p-0 text-xl"
-          >
-            ×
-          </Button>
-        </div>
-      </CardHeader>
-
-      <CardContent className="flex flex-col h-[calc(100%-60px)] p-4">
-        {/* Messages */}
-        <div className="flex-1 overflow-y-auto space-y-3 mb-4">
-          {messages.map((message) => (
-            <div
-              key={message.id}
-              className={`flex ${
-                message.type === "user" ? "justify-end" : "justify-start"
-              }`}
-            >
-              <div
-                className={`max-w-[85%] p-3 rounded-lg text-sm md:max-w-[80%] ${
-                  message.type === "user"
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-surface-elevated border"
-                }`}
-              >
-                {message.content}
+return (
+    <>
+      <div className="fixed inset-0 bg-black/30 z-40" onClick={() => setIsOpen(false)} aria-hidden="true"></div>
+      <Card className="fixed bottom-0 right-0 w-full h-full flex flex-col md:w-[440px] lg:w-[540px] md:h-[80vh] md:max-h-[700px] md:bottom-6 md:right-6 z-50 shadow-2xl bg-white/80 backdrop-blur-xl border md:rounded-2xl">
+        <CardHeader className="flex-shrink-0 border-b md:rounded-t-2xl bg-white/50 px-4 pt-4 pb-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
+                <Sparkles className="h-5 w-5 text-white" />
               </div>
+              <CardTitle className="text-lg font-semibold">AI Assistant</CardTitle>
             </div>
-          ))}
-          {isLoading && (
-            <div className="flex justify-start">
-              <div className="bg-surface-elevated border p-3 rounded-lg">
-                <div className="flex space-x-1">
-                  <div className="w-2 h-2 bg-muted-foreground rounded-full animate-pulse"></div>
-                  <div
-                    className="w-2 h-2 bg-muted-foreground rounded-full animate-pulse"
-                    style={{ animationDelay: "0.2s" }}
-                  ></div>
-                  <div
-                    className="w-2 h-2 bg-muted-foreground rounded-full animate-pulse"
-                    style={{ animationDelay: "0.4s" }}
-                  ></div>
-                </div>
-              </div>
-            </div>
-          )}
-          <div ref={messagesEndRef} />
-        </div>
-
-        {/* Input Area */}
-        <div className="mt-auto">
-          {/* Quick Actions */}
-          <div className="flex gap-1 mb-3 overflow-x-auto">
-            {quickActions.map((action, index) => (
-              <Button
-                key={index}
-                variant="outline"
-                size="sm"
-                onClick={() => handleQuickAction(action.action)}
-                className="flex-1 text-xs"
-              >
-                <action.icon className="h-3 w-3 mr-1" />
-                {action.label}
-              </Button>
-            ))}
-          </div>
-
-          {/* Input */}
-          <div className="flex gap-2">
-            <Input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask me anything..."
-              onKeyPress={(e) => e.key === "Enter" && handleSend()}
-              className="flex-1"
-            />
             <Button
-              onClick={handleSend}
-              disabled={!input.trim() || isLoading}
-              size="sm"
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsOpen(false)}
+              className="h-8 w-8 rounded-full"
+              aria-label="Close"
             >
-              <Send className="h-4 w-4" />
+              x
             </Button>
           </div>
-        </div>
-      </CardContent>
-    </Card>
+          {subject && (
+            <Badge variant="secondary" className="mt-2 ml-12 w-fit">
+              {subject} {lesson && `• ${lesson}`}
+            </Badge>
+          )}
+        </CardHeader>
+
+        <CardContent className="flex-1 flex flex-col p-0 overflow-hidden">
+          {/* Messages Area */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            {messages.map((message) => (
+              <div
+                key={message.id}
+                className={`flex items-end gap-2 ${
+                  message.type === "user" ? "justify-end" : "justify-start"
+                }`}
+              >
+                {message.type === 'assistant' && (
+                   <div className="w-7 h-7 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
+                      <Sparkles className="h-4 w-4 text-gray-500" />
+                   </div>
+                )}
+                <div
+                  className={`max-w-[85%] p-3 rounded-lg text-sm ${
+                    message.type === "user"
+                      ? "bg-blue-600 text-white rounded-br-none"
+                      : "bg-gray-100 text-gray-800 border rounded-bl-none"
+                  }`}
+                >
+                  {message.content}
+                </div>
+              </div>
+            ))}
+            {isLoading && (
+              <div className="flex items-end gap-2 justify-start">
+                 <div className="w-7 h-7 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
+                    <Sparkles className="h-4 w-4 text-gray-500" />
+                 </div>
+                <div className="bg-gray-100 border p-3 rounded-lg rounded-bl-none">
+                  <div className="flex space-x-1.5">
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"></div>
+                    <div
+                      className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"
+                      style={{ animationDelay: "0.2s" }}
+                    ></div>
+                    <div
+                      className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"
+                      style={{ animationDelay: "0.4s" }}
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+
+          {/* Input Area */}
+          <div className="flex-shrink-0 border-t md:rounded-b-2xl bg-white/50 p-3">
+            {/* Quick Actions */}
+            <div className="flex gap-2 mb-2 overflow-x-auto pb-2">
+              {quickActions.map((action, index) => {
+                const Icon = action.icon; // FIX: Assign component to capitalized variable
+                return (
+                  <Button
+                    key={index}
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleQuickAction(action.action)}
+                    className="flex-shrink-0 text-xs h-8 bg-white"
+                  >
+                    <Icon className="h-3.5 w-3.5 mr-1.5" />
+                    {action.label}
+                  </Button>
+                );
+              })}
+            </div>
+
+            {/* Input */}
+            <div className="flex items-center  gap-2">
+              <Input
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="Ask me anything..."
+                onKeyPress={(e) => e.key === "Enter" && !isLoading && handleSend()}
+                className="flex-1 bg-white"
+                disabled={isLoading}
+              />
+              <Button
+                onClick={handleSend}
+                disabled={!input.trim() || isLoading}
+                size="icon"
+                className="rounded-full flex-shrink-0 w-9 h-9 bg-blue-600 hover:bg-blue-700"
+                aria-label="Send message"
+              >
+                <Send className="h-4 w-4 text-white" />
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </>
   );
 };

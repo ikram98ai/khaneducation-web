@@ -227,7 +227,7 @@ export const LessonDetail = () => {
           </TabsContent>
         </Tabs>
       </div>
-      <AIAssistant subject_id={subject.id} lesson_id={lesson.id} />
+      <AIAssistant subject_id={subject.id} subject={subject.name} lesson_id={lesson.id} lesson={lesson.title} />
     </div>
   );
 };

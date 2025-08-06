@@ -10,7 +10,7 @@ export default function Footer() {
               <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-2 rounded-xl">
                 <BookOpen className="text-white" size={24} />
               </div>
-              <span className="text-xl font-bold">EduAgent AI</span>
+              <span className="text-xl font-bold">Khan Education</span>
             </div>
             <p className="text-gray-400 mb-6">
               Transforming education through AI-powered personalized learning experiences.
@@ -69,7 +69,7 @@ export default function Footer() {
         </div>
         
         <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-400">© 2023 EduAgent AI. All rights reserved.</p>
+          <p className="text-gray-400">© 2023 Khan Education. All rights reserved.</p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <a href="#" className="text-gray-400 hover:text-white">Terms</a>
             <a href="#" className="text-gray-400 hover:text-white">Privacy</a>

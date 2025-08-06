@@ -19,8 +19,8 @@ import {
 
 import axios from "axios";
 
-// const API_BASE_URL = "http://localhost:8000";
-const API_BASE_URL = "https://api.khaneducation.ai"
+const API_BASE_URL = "http://localhost:8000";
+// const API_BASE_URL = "https://api.khaneducation.ai"
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -35,7 +35,6 @@ api.interceptors.request.use(
     // const token = useAuthStore.getState().token;
     const token = localStorage.getItem("accessToken");
 
-    console.log("Token: ", token);
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`;
     }
@@ -89,8 +88,6 @@ export async function getStudentProfile(): Promise<StudentProfile> {
 
 // Language APIs
 export async function getLanguages(): Promise<string[]> {
-  console.log("Languages......");
-
   const response = await api.get("/languages/");
   return response.data;
 }

@@ -37,9 +37,7 @@ export const ProfileSetup = () => {
 
   // Check if profile already exists and redirect to dashboard
   useEffect(() => {
-    console.log("DEBUG: existingProfile, ",existingProfile)
     if (existingProfile && existingProfile.student_profile) {
-      console.log("Profile found, redirecting to dashboard");
       setProfile(existingProfile);
       navigate("/dashboard", { replace: true });
     }
@@ -55,7 +53,6 @@ export const ProfileSetup = () => {
     try {
       const profile = await createProfileMutation.mutateAsync(formData);
       if (profile) {
-        console.log("Profile created successfully:", profile);
         navigate("/dashboard");
       }
     } catch (error) {

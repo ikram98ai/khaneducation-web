@@ -24,7 +24,6 @@ export const AuthForm = () => {
   const { isLoading, isAuthenticated } = useAuthStore();
 
   useEffect(() => {
-    console.log("is auth:: ",isAuthenticated)
     if (isAuthenticated) {
       navigate('/dashboard');
     }

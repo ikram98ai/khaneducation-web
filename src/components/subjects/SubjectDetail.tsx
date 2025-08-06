@@ -190,7 +190,7 @@ export const SubjectDetail = () => {
           ))}
         </div>
       </div>
-      <AIAssistant subject_id={subject.id} />
+      <AIAssistant subject_id={subject.id} subject={subject.name} />
     </div>
   );
 };
