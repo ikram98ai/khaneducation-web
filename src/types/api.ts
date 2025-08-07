@@ -124,10 +124,14 @@ export interface AdminDashboard {
   recent_attempts: QuizAttempt[];
 }
 
+interface AIMessage{
+  role:string;
+  content:string;
+}
 export interface AIAssistRequest {
   subject_id: string;
   lesson_id?: string;
-  query_text: string;
+  user_messages:  AIMessage[];
 }
 
 export interface AIAssistResponse {

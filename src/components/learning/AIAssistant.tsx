@@ -5,19 +5,20 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, Send, Lightbulb, Brain, Target } from "lucide-react";
 import { useAiAssistance } from "@/hooks/useApiQueries";
+import MarkdownViewer from "../mdviewer/MarkdownViewer";
 
 interface Message {
-  id: string;
+  id?: string;
   content: string;
-  type: "user" | "assistant";
-  timestamp: Date;
+  role: "user" | "assistant";
+  timestamp?: Date;
 }
 
 export const AIAssistant = ({
   subject_id,
   subject,
   lesson_id,
-  lesson
+  lesson,
 }: {
   subject_id: string;
   subject: string;
@@ -44,9 +45,11 @@ export const AIAssistant = ({
     if (isOpen && messages.length === 0) {
       const welcomeMessage: Message = {
         id: "1",
-        content: `Hi! I'm your AI learning assistant. I'm here to help you understand ${subject}${lesson ? ` • ${lesson}` : ''} better. 
-        Feel free to ask me questions about the concepts, request explanations, or get study tips!`, 
-        type: "assistant",
+        content: `Hi! I'm your AI learning assistant. I'm here to help you understand ${subject}${
+          lesson ? ` • ${lesson}` : ""
+        } better. 
+        Feel free to ask me questions about the concepts, request explanations, or get study tips!`,
+        role: "assistant",
         timestamp: new Date(),
       };
       setMessages([welcomeMessage]);
@@ -59,26 +62,31 @@ export const AIAssistant = ({
     const userMessage: Message = {
       id: Date.now().toString(),
       content: input,
-      type: "user",
+      role: "user",
       timestamp: new Date(),
     };
 
-    setMessages((prev) => [...prev, userMessage]);
+    const messagesToSend = [...messages, userMessage]; // Include the new user message
+    setMessages((prevMessages) => [...prevMessages, userMessage]);
     setInput("");
     setIsLoading(true);
 
     const requestData = {
       subject_id: subject_id,
       lesson_id: lesson_id,
-      query_text: input,
+      user_messages: messagesToSend
+        .slice(-10)
+        .map(({ role, content }) => ({ role, content })),
     };
 
     try {
       const response = await aiAssistanceMutation.mutateAsync(requestData);
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
-        content: response.ai_response, // Assuming the API returns a field named response_text
-        type: "assistant",
+        content:
+          response.ai_response ||
+          "I am sorry, I cannot provide a response at the moment. Please try again later.",
+        role: "assistant",
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, assistantMessage]);
@@ -87,7 +95,7 @@ export const AIAssistant = ({
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         content: "Oops! Something went wrong. Please try again.",
-        type: "assistant",
+        role: "assistant",
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, errorMessage]);
@@ -131,9 +139,13 @@ export const AIAssistant = ({
       </Button>
     );
   }
-return (
+  return (
     <>
-      <div className="fixed inset-0 bg-black/30 z-40" onClick={() => setIsOpen(false)} aria-hidden="true"></div>
+      <div
+        className="fixed inset-0 bg-black/30 z-40"
+        onClick={() => setIsOpen(false)}
+        aria-hidden="true"
+      ></div>
       <Card className="fixed bottom-0 right-0 w-full h-full flex flex-col md:w-[440px] lg:w-[540px] md:h-[80vh] md:max-h-[700px] md:bottom-6 md:right-6 z-50 shadow-2xl bg-white/80 backdrop-blur-xl border md:rounded-2xl">
         <CardHeader className="flex-shrink-0 border-b md:rounded-t-2xl bg-white/50 px-4 pt-4 pb-3">
           <div className="flex items-center justify-between">
@@ -141,7 +153,9 @@ return (
               <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
                 <Sparkles className="h-5 w-5 text-white" />
               </div>
-              <CardTitle className="text-lg font-semibold">AI Assistant</CardTitle>
+              <CardTitle className="text-lg font-semibold">
+                AI Assistant
+              </CardTitle>
             </div>
             <Button
               variant="ghost"
@@ -167,30 +181,34 @@ return (
               <div
                 key={message.id}
                 className={`flex items-end gap-2 ${
-                  message.type === "user" ? "justify-end" : "justify-start"
+                  message.role === "user" ? "justify-end" : "justify-start"
                 }`}
               >
-                {message.type === 'assistant' && (
-                   <div className="w-7 h-7 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
-                      <Sparkles className="h-4 w-4 text-gray-500" />
-                   </div>
+                {message.role === "assistant" && (
+                  <div className="w-7 h-7 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
+                    <Sparkles className="h-4 w-4 text-gray-500" />
+                  </div>
                 )}
                 <div
                   className={`max-w-[85%] p-3 rounded-lg text-sm ${
-                    message.type === "user"
+                    message.role === "user"
                       ? "bg-blue-600 text-white rounded-br-none"
                       : "bg-gray-100 text-gray-800 border rounded-bl-none"
                   }`}
                 >
-                  {message.content}
+                  {message.role === "user" ? (
+                    message.content
+                  ) : (
+                    <MarkdownViewer markdown={message.content} />
+                  )}
                 </div>
               </div>
             ))}
             {isLoading && (
               <div className="flex items-end gap-2 justify-start">
-                 <div className="w-7 h-7 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
-                    <Sparkles className="h-4 w-4 text-gray-500" />
-                 </div>
+                <div className="w-7 h-7 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
+                  <Sparkles className="h-4 w-4 text-gray-500" />
+                </div>
                 <div className="bg-gray-100 border p-3 rounded-lg rounded-bl-none">
                   <div className="flex space-x-1.5">
                     <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"></div>
@@ -236,7 +254,9 @@ return (
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Ask me anything..."
-                onKeyPress={(e) => e.key === "Enter" && !isLoading && handleSend()}
+                onKeyPress={(e) =>
+                  e.key === "Enter" && !isLoading && handleSend()
+                }
                 className="flex-1 bg-white"
                 disabled={isLoading}
               />
