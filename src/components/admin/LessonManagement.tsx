@@ -55,6 +55,7 @@ import {
   CheckCircle,
   Clock,
   RefreshCw,
+  ArrowUpDown,
 } from "lucide-react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -74,7 +75,6 @@ const lessonSchema = z.object({
     .default("Pashto"),
   content: z.string().optional(),
   subject_id: z.string().min(1, "Subject is required"),
-  status: z.enum(["draft", "pending", "failed", "verified"]).default("draft"),
 });
 
 type LessonFormData = z.infer<typeof lessonSchema>;
@@ -85,6 +85,17 @@ export const LessonManagement = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [editingLesson, setEditingLesson] = useState<Lesson | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [sortColumn, setSortColumn] = useState<string | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
+  const handleSort = (column: string) => {
+    if (sortColumn === column) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortColumn(column);
+      setSortDirection('asc');
+    }
+  };
 
   const {
     data: subjects,
@@ -120,12 +131,51 @@ export const LessonManagement = () => {
   const regenerateContentMutation = useRegenerateAdminLessonContent();
   const verifyLessonMutation = useVerifyAdminLesson();
 
-  const filteredLessons =
-    lessons?.filter(
-      (lesson) =>
-        lesson.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
-        (selectedSubject === "" || lesson.subject_id === selectedSubject)
-    ) || [];
+  const filteredLessons = lessons?.filter(
+    (lesson) =>
+      lesson.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      (selectedSubject === "" || lesson.subject_id === selectedSubject)
+  ) || [];
+
+  const sortedLessons = [...filteredLessons].sort((a, b) => {
+    if (!sortColumn) return 0;
+
+    let aValue: any;
+    let bValue: any;
+
+    switch (sortColumn) {
+      case "lesson":
+        aValue = a.title.toLowerCase();
+        bValue = b.title.toLowerCase();
+        break;
+      case "subject":
+        aValue = subjects?.find((s) => s.id === a.subject_id)?.name?.toLowerCase() || "";
+        bValue = subjects?.find((s) => s.id === b.subject_id)?.name?.toLowerCase() || "";
+        break;
+      case "language":
+        aValue = a.language.toLowerCase();
+        bValue = b.language.toLowerCase();
+        break;
+      case "status":
+        aValue = a.status.toLowerCase();
+        bValue = b.status.toLowerCase();
+        break;
+      case "created":
+        aValue = new Date(a.created_at).getTime();
+        bValue = new Date(b.created_at).getTime();
+        break;
+      default:
+        return 0;
+    }
+
+    if (aValue < bValue) {
+      return sortDirection === "asc" ? -1 : 1;
+    }
+    if (aValue > bValue) {
+      return sortDirection === "asc" ? 1 : -1;
+    }
+    return 0;
+  });
 
   const handleCreateLesson = async (data: LessonFormData) => {
     try {
@@ -144,7 +194,6 @@ export const LessonManagement = () => {
     setValue("title", lesson.title);
     setValue("language", lesson.language);
     setValue("content", lesson.content);
-    setValue("status", lesson.status);
     setValue("subject_id", lesson.subject_id);
     setIsEditModalOpen(true);
   };
@@ -159,7 +208,6 @@ export const LessonManagement = () => {
           content: data.content,
           subject_id: data.subject_id,
           language: data.language,
-          status: data.status,
         },
       });
       setIsEditModalOpen(false);
@@ -203,18 +251,7 @@ export const LessonManagement = () => {
     }
   };
 
-  // Reset form when modals open/close
-  useEffect(() => {
-    if (isCreateModalOpen) {
-      reset({
-        title: "",
-        content: "",
-        subject_id: subjects?.[0]?.id || "",
-        status: "draft",
-      });
-    }
-  }, [isCreateModalOpen, subjects, reset]);
-
+  
   useEffect(() => {
     if (!isEditModalOpen) {
       setEditingLesson(null);
@@ -449,33 +486,7 @@ export const LessonManagement = () => {
                   {errors.content.message}
                 </p>
               )}
-            </div>
-
-            <div>
-              <Label htmlFor="status">Status</Label>
-              <Controller
-                name="status"
-                control={control}
-                render={({ field }) => (
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select status" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="draft">Draft</SelectItem>
-                      <SelectItem value="verified">Verified</SelectItem>
-                      <SelectItem value="pending">Pending</SelectItem>
-                      <SelectItem value="failed">Failed</SelectItem>
-                    </SelectContent>
-                  </Select>
-                )}
-              />
-              {errors.status && (
-                <p className="text-sm text-destructive mt-1">
-                  {errors.status.message}
-                </p>
-              )}
-            </div>
+            </div> 
 
             <DialogFooter>
               <Button
@@ -543,16 +554,61 @@ export const LessonManagement = () => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Lesson</TableHead>
-                <TableHead>Subject</TableHead>
-                <TableHead>Language</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Created</TableHead>
+                <TableHead>
+                  <Button
+                    variant="ghost"
+                    onClick={() => handleSort("lesson")}
+                    className="px-0 hover:bg-transparent"
+                  >
+                    Lesson
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                  </Button>
+                </TableHead>
+                <TableHead>
+                  <Button
+                    variant="ghost"
+                    onClick={() => handleSort("subject")}
+                    className="px-0 hover:bg-transparent"
+                  >
+                    Subject
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                  </Button>
+                </TableHead>
+                <TableHead>
+                  <Button
+                    variant="ghost"
+                    onClick={() => handleSort("language")}
+                    className="px-0 hover:bg-transparent"
+                  >
+                    Language
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                  </Button>
+                </TableHead>
+                <TableHead>
+                  <Button
+                    variant="ghost"
+                    onClick={() => handleSort("status")}
+                    className="px-0 hover:bg-transparent"
+                  >
+                    Status
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                  </Button>
+                </TableHead>
+                <TableHead>
+                  <Button
+                    variant="ghost"
+                    onClick={() => handleSort("created")}
+                    className="px-0 hover:bg-transparent"
+                  >
+                    Created
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                  </Button>
+                </TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredLessons.map((lesson) => (
+              {sortedLessons.map((lesson) => (
                 <TableRow key={lesson.id}>
                   <TableCell>
                     <div>
