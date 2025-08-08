@@ -34,6 +34,7 @@ export interface Lesson {
   content: string;
   status: "VE" | "DR";
   language: "Arabic" | "English" | "Pashto" | "Persian" | "Urdu";
+  order_in_subject?: number;
   created_at: string;
   updated_at: string;
   verified_at: string | null;

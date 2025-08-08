@@ -113,7 +113,9 @@ export const SubjectDetail = () => {
           </div>
 
           {/* Lessons Content */}
-          {subject.lessons.map((lesson, index) => (
+          {subject.lessons
+            .sort((a, b) => a.order_in_subject - b.order_in_subject)
+            .map((lesson, index) => (
             <Link
               to={`/subjects/${subject.id}/lessons/${lesson.id}`}
               key={lesson.id}
@@ -135,7 +137,7 @@ export const SubjectDetail = () => {
                               : "bg-muted text-muted-foreground"
                           }`}
                         >
-                          {lesson.progress === 100 ? "✓" : index + 1}
+                          {lesson.progress === 100 ? "✓" : lesson.order_in_subject}
                         </div>
                         <h3 className="text-lg font-semibold">
                           {lesson.title}
