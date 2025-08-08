@@ -20,6 +20,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Terminal } from "lucide-react";
 import { AIAssistant } from "../learning/AIAssistant";
 import MarkdownViewer from "../mdviewer/MarkdownViewer";
+import { Badge } from "../ui/badge";
 
 export const LessonDetail = () => {
   const navigate = useNavigate();
@@ -103,6 +104,12 @@ export const LessonDetail = () => {
           </Button>
           <h1 className="text-3xl font-bold mb-2">{lesson.title}</h1>
           <div className="flex items-center gap-3">
+            <Badge className="bg-white/20 text-white border-white/30">
+              GR{subject.grade_level}
+            </Badge>
+            <Badge className="bg-white/20 text-white border-white/30">
+              {lesson.language}
+            </Badge>
             <span className="text-blue-100">
               • Progress: {lesson.progress || 0}%
             </span>
@@ -120,7 +127,7 @@ export const LessonDetail = () => {
 
           <TabsContent value="content" className="mt-6">
             <Card className="shadow-soft text-wrap">
-              <CardHeader >
+              <CardHeader>
                 <CardTitle>Lesson Content</CardTitle>
                 <CardDescription>Learn the core concepts</CardDescription>
               </CardHeader>
@@ -148,7 +155,7 @@ export const LessonDetail = () => {
                       </div>
                     </CardHeader>
                     <CardContent className="text-wrap">
-                        <MarkdownViewer markdown={task.content} />
+                      <MarkdownViewer markdown={task.content} />
                       <details className="cursor-pointer">
                         <summary className="text-primary hover:underline">
                           Show Solution
@@ -227,7 +234,12 @@ export const LessonDetail = () => {
           </TabsContent>
         </Tabs>
       </div>
-      <AIAssistant subject_id={subject.id} subject={subject.name} lesson_id={lesson.id} lesson={lesson.title} />
+      <AIAssistant
+        subject_id={subject.id}
+        subject={subject.name}
+        lesson_id={lesson.id}
+        lesson={lesson.title}
+      />
     </div>
   );
 };

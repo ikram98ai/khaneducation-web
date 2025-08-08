@@ -60,7 +60,8 @@ import { Lesson } from "@/types/api";
 
 const lessonSchema = z.object({
   title: z.string().min(1, "Lesson title is required"),
-  content: z.string().min(1, "Lesson content is required"),
+  language: z.enum(["EN","PS","UR","FR","AR","ES","FA"]),
+  content: z.string().min(1, "Lesson content is required").optional(),
   subject_id: z.string().min(1, "Subject is required"),
   status: z.enum(["VE", "DR"]).default("DR"),
 });
@@ -100,9 +101,6 @@ export const LessonManagement = () => {
     formState: { errors, isSubmitting },
   } = useForm<LessonFormData>({
     resolver: zodResolver(lessonSchema),
-    defaultValues: {
-      status: "DR",
-    },
   });
 
   const createLessonMutation = useCreateAdminLesson();
@@ -131,6 +129,7 @@ export const LessonManagement = () => {
   const handleEditLesson = (lesson: Lesson) => {
     setEditingLesson(lesson);
     setValue("title", lesson.title);
+    setValue("language", lesson.language);
     setValue("content", lesson.content);
     setValue("status", lesson.status);
     setValue("subject_id", lesson.subject_id);

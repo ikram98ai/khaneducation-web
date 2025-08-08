@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { SmartSearch } from "@/components/search/SmartSearch";
 import {
   useStudentDashboard,
   useStudentDashboardStatistics,
@@ -49,32 +48,30 @@ export const Dashboard = () => {
       <Navbar />
 
       <div className="max-w-6xl mx-auto px-6 py-8">
-        {/* Smart Search */}
-        {/* <div className="mb-8 flex justify-center">
-          <SmartSearch
-            onSelectResult={(result) => console.log("Selected:", result)}
-          />
-        </div> */}
         {/* Stats Overview with staggered animations */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <Card
             variant="elevated"
             className="animate-spring-in"
             style={{ animationDelay: "0.1s" }}
           >
-            <CardContent className="p-6">
+            <CardContent className="p-4 md:p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Progress</p>
-                  <p className="text-2xl font-bold">
-                    {Math.round((completed_lessons / total_lessons) * 100) || 0}%
+                  <p className="text-xs text-muted-foreground md:text-sm">
+                    Progress
+                  </p>
+                  <p className="text-lg font-bold md:text-2xl">
+                    {Math.round((completed_lessons / total_lessons) * 100) ||
+                      0}
+                    %
                   </p>
                 </div>
-                <div className="text-2xl animate-float">📈</div>
+                <div className="text-xl md:text-2xl animate-float">📈</div>
               </div>
               <Progress
-                value={completed_lessons / total_lessons || 0 * 100}
-                className="mt-2"
+                value={(completed_lessons / total_lessons) * 100 || 0}
+                className="mt-2 hidden md:block"
               />
             </CardContent>
           </Card>
@@ -84,14 +81,18 @@ export const Dashboard = () => {
             className="animate-spring-in"
             style={{ animationDelay: "0.2s" }}
           >
-            <CardContent className="p-6">
+            <CardContent className="p-4 md:p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Avg Score</p>
-                  <p className="text-2xl font-bold text-success">{avg_score}%</p>
+                  <p className="text-xs text-muted-foreground md:text-sm">
+                    Avg Score
+                  </p>
+                  <p className="text-lg font-bold text-success md:text-2xl">
+                    {avg_score}%
+                  </p>
                 </div>
                 <div
-                  className="text-2xl animate-float"
+                  className="text-xl md:text-2xl animate-float"
                   style={{ animationDelay: "0.5s" }}
                 >
                   🎯
@@ -105,16 +106,18 @@ export const Dashboard = () => {
             className="animate-spring-in"
             style={{ animationDelay: "0.3s" }}
           >
-            <CardContent className="p-6">
+            <CardContent className="p-4 md:p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Lessons</p>
-                  <p className="text-2xl font-bold">
+                  <p className="text-xs text-muted-foreground md:text-sm">
+                    Lessons
+                  </p>
+                  <p className="text-lg font-bold md:text-2xl">
                     {completed_lessons}/{total_lessons}
                   </p>
                 </div>
                 <div
-                  className="text-2xl animate-float"
+                  className="text-xl md:text-2xl animate-float"
                   style={{ animationDelay: "1s" }}
                 >
                   📚
@@ -128,15 +131,17 @@ export const Dashboard = () => {
             className="animate-spring-in"
             style={{ animationDelay: "0.4s" }}
           >
-            <CardContent className="p-6">
+            <CardContent className="p-4 md:p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Streak</p>
-                  <p className="text-2xl font-bold text-warning">
+                  <p className="text-xs text-muted-foreground md:text-sm">
+                    Streak
+                  </p>
+                  <p className="text-lg font-bold text-warning md:text-2xl">
                     {streak} days
                   </p>
                 </div>
-                <div className="text-2xl">🔥</div>
+                <div className="text-xl md:text-2xl">🔥</div>
               </div>
             </CardContent>
           </Card>
@@ -171,7 +176,6 @@ export const Dashboard = () => {
                           <Badge variant="secondary">
                             GR{subject.grade_level}
                           </Badge>
-                          <Badge variant="outline">{subject.language}</Badge>
                         </div>
 
                         <div className="flex items-center justify-between">

@@ -24,7 +24,6 @@ export interface Subject {
   completed_lessons?: number;
   progress?: number;
   grade_level: number;
-  language: string;
 }
 
 export interface Lesson {
@@ -34,6 +33,7 @@ export interface Lesson {
   title: string;
   content: string;
   status: "VE" | "DR";
+  language: "Arabic" | "English" | "Pashto" | "Persian" | "Urdu";
   created_at: string;
   updated_at: string;
   verified_at: string | null;

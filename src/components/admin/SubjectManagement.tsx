@@ -42,7 +42,6 @@ const subjectSchema = z.object({
   name: z.string().min(1, "Subject name is required"),
   description: z.string().min(1, "Description is required"),
   grade_level: z.number().min(1).max(12),
-  language: z.string().min(1, "Language is required"),
 });
 
 type SubjectFormData = z.infer<typeof subjectSchema>;
@@ -111,7 +110,6 @@ export const SubjectManagement = () => {
     setValue("name", subject.name);
     setValue("description", subject.description);
     setValue("grade_level", subject.grade_level);
-    setValue("language", subject.language);
     setIsEditModalOpen(true);
   };
 
@@ -218,26 +216,7 @@ export const SubjectManagement = () => {
                   )}
                 </div>
 
-                <div>
-                  <Label htmlFor="language">Language</Label>
-                  <Select onValueChange={(value) => setValue("language", value)}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select language" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="English">English</SelectItem>
-                      <SelectItem value="Spanish">Spanish</SelectItem>
-                      <SelectItem value="French">French</SelectItem>
-                      <SelectItem value="German">German</SelectItem>
-                      <SelectItem value="Mandarin">Mandarin</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  {errors.language && (
-                    <p className="text-sm text-destructive mt-1">
-                      {errors.language.message}
-                    </p>
-                  )}
-                </div>
+
               </div>
 
               <DialogFooter>
@@ -282,7 +261,6 @@ export const SubjectManagement = () => {
               <TableRow>
                 <TableHead>Subject</TableHead>
                 <TableHead>Grade Level</TableHead>
-                <TableHead>Language</TableHead>
                 <TableHead>Progress</TableHead>
                 <TableHead>Lessons</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
@@ -310,7 +288,6 @@ export const SubjectManagement = () => {
                       Grade {subject.grade_level}
                     </Badge>
                   </TableCell>
-                  <TableCell>{subject.language}</TableCell>
                   <TableCell>
                     <div className="flex items-center">
                       <div className="w-16 bg-secondary rounded-full h-2 mr-2">
@@ -416,21 +393,6 @@ export const SubjectManagement = () => {
                 </Select>
               </div>
 
-              <div>
-                <Label htmlFor="edit_language">Language</Label>
-                <Select onValueChange={(value) => setValue("language", value)}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="English">English</SelectItem>
-                    <SelectItem value="Spanish">Spanish</SelectItem>
-                    <SelectItem value="French">French</SelectItem>
-                    <SelectItem value="German">German</SelectItem>
-                    <SelectItem value="Mandarin">Mandarin</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
             </div>
 
             <DialogFooter>

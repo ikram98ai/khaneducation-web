@@ -71,9 +71,9 @@ export const SubjectDetail = () => {
             <Badge className="bg-white/20 text-white border-white/30">
               GR{subject.grade_level}
             </Badge>
-            <Badge className="bg-white/20 text-white border-white/30">
-              {subject.language}
-            </Badge>
+           {subject.lessons && <Badge className="bg-white/20 text-white border-white/30">
+              {subject.lessons[0].language}
+            </Badge>}
             <span className="text-blue-100">
               • {subject.total_lessons} Lessons
             </span>
