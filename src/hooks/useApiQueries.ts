@@ -611,3 +611,28 @@ export const useDeleteAdminLesson = () => {
     },
   });
 };
+
+export const useVerifyAdminLesson = () => {
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+
+  return useMutation({
+    mutationFn: (lessonId: string) => adminAPI.verifyAdminLesson(lessonId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin-lessons"] });
+      toast({
+        title: "Lesson Verified",
+        description: "Lesson has been marked as verified.",
+      });
+    },
+    onError: (error: AxiosError) => {
+      toast({
+        title: "Failed to Verify Lesson",
+        description:
+          (error.response?.data as { detail: string })?.detail ||
+          "An error occurred",
+        variant: "destructive",
+      });
+    },
+  });
+};

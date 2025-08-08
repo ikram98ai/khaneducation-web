@@ -265,6 +265,11 @@ export const adminAPI = {
     await api.post(`/admin/lessons/${lessonId}/regenerate-content/`);
   },
 
+  verifyAdminLesson: async (lessonId: string): Promise<Lesson> => {
+    const response = await api.put(`/admin/lessons/${lessonId}/verify`);
+    return response.data;
+  },
+
   // Admin Practice Task Management
   createAdminPracticeTask: async (lessonId: string, taskData: { content: string; difficulty: "EA" | "ME" | "HA" }): Promise<PracticeTask> => {
     const response = await api.post(`/admin/lessons/${lessonId}/practice_tasks/`, taskData);

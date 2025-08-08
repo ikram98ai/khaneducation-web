@@ -44,6 +44,7 @@ import {
   useUpdateAdminLesson,
   useDeleteAdminLesson,
   useRegenerateAdminLessonContent,
+  useVerifyAdminLesson,
 } from "@/hooks/useApiQueries";
 import {
   Plus,
@@ -117,6 +118,7 @@ export const LessonManagement = () => {
   const updateLessonMutation = useUpdateAdminLesson();
   const deleteLessonMutation = useDeleteAdminLesson();
   const regenerateContentMutation = useRegenerateAdminLessonContent();
+  const verifyLessonMutation = useVerifyAdminLesson();
 
   const filteredLessons =
     lessons?.filter(
@@ -187,6 +189,16 @@ export const LessonManagement = () => {
         await regenerateContentMutation.mutateAsync(lessonId);
       } catch (error) {
         console.error("Failed to regenerate lesson content:", error);
+      }
+    }
+  };
+
+  const handleVerifyLesson = async (lessonId: string) => {
+    if (window.confirm("Are you sure you want to verify this lesson?")) {
+      try {
+        await verifyLessonMutation.mutateAsync(lessonId);
+      } catch (error) {
+        console.error("Failed to verify lesson:", error);
       }
     }
   };
@@ -606,6 +618,16 @@ export const LessonManagement = () => {
                       >
                         <RefreshCw className="w-4 h-4" />
                       </Button>
+                      {lesson.status !== "verified" && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleVerifyLesson(lesson.id)}
+                          disabled={verifyLessonMutation.isPending}
+                        >
+                          <CheckCircle className="w-4 h-4" />
+                        </Button>
+                      )}
                       <Button
                         variant="ghost"
                         size="sm"
