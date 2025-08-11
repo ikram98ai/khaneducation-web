@@ -101,23 +101,22 @@ export const QuizPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-accent/5 to-primary/5">
       {/* Header */}
-      {/* <div className="bg-gradient-primary text-white px-6 py-8">
+      <div className="bg-gradient-primary text-white px-6 py-8">
         <div className="max-w-6xl mx-auto">
           <Button
             variant="ghost"
             onClick={onBack}
             className="text-white hover:bg-white/20 mb-4"
           >
-            ← Back to {subject.name}
+            ← Back to Lesson
           </Button>
-          <h1 className="text-3xl font-bold mb-2">{lesson.title}</h1>
           <div className="flex items-center gap-3">
-            <span className="text-blue-100">
-              • Progress: {lesson.progress || 0}%
+            <span className="text-red-400">
+              Note: If you leave the quiz page once you started, it will be submited.
             </span>
           </div>
         </div>
-      </div> */}
+      </div>
 
       <div className="max-w-4xl mx-auto px-6 py-8">
         {isQuizLoading ? (

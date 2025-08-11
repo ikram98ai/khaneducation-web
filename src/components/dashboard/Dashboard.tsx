@@ -5,7 +5,6 @@ import { Badge } from "@/components/ui/badge";
 import { useStudentDashboard } from "@/hooks/useApiQueries";
 import { Link } from "react-router-dom";
 import { Navbar } from "../navigation/Navbar";
-import { formatDistanceToNow } from "date-fns";
 import { Skeleton } from "../ui/skeleton";
 
 export const Dashboard = () => {
@@ -29,11 +28,7 @@ export const Dashboard = () => {
     return <div>Error loading dashboard data.</div>;
   }
 
-  const {
-    enrollments: enrolledSubjects,
-    recent_attempts: recentAttempts,
-    stats,
-  } = dashboardData;
+  const { enrollments: enrolledSubjects, stats } = dashboardData;
 
   const { completed_lessons, total_lessons, avg_score, streak } = stats;
 
@@ -189,88 +184,7 @@ export const Dashboard = () => {
               </Link>
             ))}
           </div>
-
-          {/* Recent Activity */}
-          <div
-            className="animate-slide-up-fade"
-            style={{ animationDelay: "0.7s" }}
-          >
-            <h2 className="text-2xl font-bold mb-6">Recent Activity</h2>
-            <Card
-              variant="glass"
-              className="animate-spring-in"
-              style={{ animationDelay: "0.9s" }}
-            >
-              <CardContent className="p-6">
-                <div className="space-y-4">
-                  {recentAttempts.map((activity, index) => (
-                    <div
-                      key={activity.id}
-                      className="flex items-center justify-between p-3 bg-surface-hover rounded-lg hover:bg-surface-pressed transition-all duration-300 animate-spring-in"
-                      style={{ animationDelay: `${1.1 + index * 0.1}s` }}
-                    >
-                      <div>
-                        <p className="font-medium">{activity.lesson_title}</p>
-                        <p className="text-sm text-muted-foreground">
-                          Quiz Version: {activity.quiz_version}
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                          {formatDistanceToNow(new Date(activity.start_time))}{" "}
-                          ago
-                        </p>
-                        <p className="text-sm">
-                          <span className="font-bold">AI Feedback: </span>
-                          {activity.ai_feedback}
-                        </p>
-                      </div>
-                      <Badge
-                        variant={
-                          activity.score >= 90
-                            ? "default"
-                            : activity.score >= 80
-                            ? "secondary"
-                            : "outline"
-                        }
-                      >
-                        {activity.score}%
-                      </Badge>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Quick Actions */}
-            {/* <Card
-              variant="floating"
-              className="mt-6 animate-spring-in"
-              style={{ animationDelay: "1.2s" }}
-            >
-              <CardHeader>
-                <CardTitle>Quick Actions</CardTitle>
-                <CardDescription>Jump back into your learning</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  <Button variant="glass" className="w-full justify-start">
-                    📝 Take a Practice Quiz
-                  </Button>
-                  <Button variant="glass" className="w-full justify-start">
-                    📖 Review Past Lessons
-                  </Button>
-                  <Button variant="glass" className="w-full justify-start">
-                    🎯 View Learning Goals
-                  </Button>
-                </div>
-              </CardContent>
-            </Card> */}
-          </div>
         </div>
-
-        {/* Progress Analytics */}
-        {/* <div className="mt-12">
-          <ProgressAnalytics user={user} enrollments={enrollments} />
-        </div> */}
       </div>
     </div>
   );

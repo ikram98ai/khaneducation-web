@@ -84,14 +84,11 @@ export interface StudentProfile {
   student_profile?: Student;
 }
 
-export interface Enrollment extends Subject {
-  enrolled_at: string;
-}
+
 
 export interface QuizAttempt {
   id: string;
   student_id?: string;
-  quiz_id: string;
   quiz_version: number;
   start_time: string;
   lesson_title?: string;
@@ -120,8 +117,7 @@ export interface StudentDashboardStats {
 }
 
 export interface StudentDashboard {
-  enrollments: Enrollment[];
-  recent_attempts: QuizAttempt[];
+  enrollments: Subject[];
   stats: StudentDashboardStats
 }
 
