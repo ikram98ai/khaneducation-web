@@ -58,7 +58,6 @@ export interface Quiz {
   id: string;
   lesson_title: string;
   quiz_questions: Question[];
-  ai_generated: boolean;
   created_at: string;
 }
 
@@ -97,6 +96,7 @@ export interface QuizAttempt {
   passed: boolean;
   ai_feedback?:string;
   cheating_detected: boolean;
+  responses: QuizResponse[]
 }
 
 export interface QuizResponse {
@@ -142,4 +142,25 @@ export interface AIAssistRequest {
 
 export interface AIAssistResponse {
   ai_response: string;
+}
+
+export interface QuizAttemptResponsesOut {
+    question_id: string;
+    question_text: string;
+    question_type: string;
+    student_answer: string;
+    correct_answer: string;
+}
+
+export interface QuizAttemptOut {
+    id: string;
+    lesson_title?: string;
+    start_time: string; // Assuming datetime will be string in ISO format
+    end_time?: string; // Assuming datetime will be string in ISO format
+    score?: number;
+    passed: boolean;
+    ai_feedback?: string;
+    quiz_version?: number;
+    cheating_detected: boolean;
+    responses: QuizAttemptResponsesOut[];
 }

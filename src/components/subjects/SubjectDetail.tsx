@@ -96,11 +96,11 @@ export const SubjectDetail = () => {
                     <div className="flex justify-between text-sm mb-1">
                       <span>Overall Progress</span>
                       <span>
-                        {(subject.completed_lessons / subject.total_lessons)||0}%
+                        {subject.progress||0}%
                       </span>
                     </div>
                     <Progress
-                      value={(subject.completed_lessons / subject.total_lessons)||0}
+                      value={(subject.progress)||0}
                     />
                   </div>
                   <div className="text-sm text-muted-foreground">

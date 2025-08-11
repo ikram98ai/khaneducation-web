@@ -166,11 +166,12 @@ export const useLesson = (lessonId: string) => {
 };
 
 // Quiz hooks
-export const useQuiz = (lessonId: string) => {
+export const useQuiz = (lessonId: string, options?: { enabled: boolean }) => {
   return useQuery({
     queryKey: ["quiz", lessonId],
     queryFn: () => getQuiz(lessonId),
     enabled: !!lessonId,
+    ...options,
   });
 };
 

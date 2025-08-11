@@ -31,7 +31,9 @@ export const QuizPage = () => {
     data: quiz,
     isLoading: isQuizLoading,
     isError: isQuizError,
-  } = useQuiz(lessonId);
+  } = useQuiz(lessonId, {
+    enabled: quizStarted,
+  });
 
   const submitQuizMutation = useSubmitQuiz();
 
@@ -80,15 +82,85 @@ export const QuizPage = () => {
     );
   }
 
-  if (isQuizError || !quiz) {
+  if (isQuizError) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-background via-accent/5 to-primary/5 p-6 flex items-center justify-center">
         <Alert variant="destructive" className="max-w-lg">
           <Terminal className="h-4 w-4" />
-          <AlertTitle>Error Loading Lesson</AlertTitle>
+          <AlertTitle>Error Loading Quiz</AlertTitle>
           <AlertDescription>
-            There was a problem fetching the details for this lesson. Please try
-            again later.
+            There was a problem fetching the quiz. Please try again later.
+            <Button onClick={onBack} variant="link" className="p-0 h-auto mt-2">
+              Go Back
+            </Button>
+          </AlertDescription>
+        </Alert>
+      </div>
+    );
+  }
+
+  if (!quizStarted) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background via-accent/5 to-primary/5 p-6 flex items-center justify-center">
+        <Card className="shadow-soft w-full max-w-lg">
+          <CardHeader>
+            <CardTitle>Knowledge Check Quiz</CardTitle>
+            <CardDescription>
+              Test your understanding of the lesson.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="flex items-center gap-4">
+                <div className="text-2xl">🧠</div>
+                <div>
+                  <p className="font-medium">Ready to test your knowledge?</p>
+                  <p className="text-sm text-muted-foreground">
+                    You need 70% or higher to pass.
+                  </p>
+                  <p className="text-sm text-red-500">
+                    Note: If you leave the quiz page once you started, it will
+                    be submitted.
+                  </p>
+                </div>
+              </div>
+              <Button
+                variant="gradient"
+                onClick={() => setQuizStarted(true)}
+                size="lg"
+                className="w-full"
+              >
+                Start Quiz
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (isQuizLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background via-accent/5 to-primary/5 p-6">
+        <Skeleton className="h-10 w-48 mb-8" />
+        <Skeleton className="h-16 w-full mb-4" />
+        <div className="space-y-4">
+          <Skeleton className="h-24 w-full" />
+          <Skeleton className="h-24 w-full" />
+          <Skeleton className="h-24 w-full" />
+        </div>
+      </div>
+    );
+  }
+
+  if (!quiz) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background via-accent/5 to-primary/5 p-6 flex items-center justify-center">
+        <Alert variant="destructive" className="max-w-lg">
+          <Terminal className="h-4 w-4" />
+          <AlertTitle>No Quiz Available</AlertTitle>
+          <AlertDescription>
+            There is no quiz available for this lesson.
             <Button onClick={onBack} variant="link" className="p-0 h-auto mt-2">
               Go Back
             </Button>
@@ -111,51 +183,16 @@ export const QuizPage = () => {
             ← Back to Lesson
           </Button>
           <div className="flex items-center gap-3">
-            <span className="text-red-400">
-              Note: If you leave the quiz page once you started, it will be submited.
+            <span className="text-red-100">
+              Note: If you leave the quiz page once you started, it will be
+              submitted.
             </span>
           </div>
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-6 py-8">
-        {isQuizLoading ? (
-          <p>Loading quiz...</p>
-        ) : isQuizError ? (
-          <p>Error loading quiz.</p>
-        ) : !quiz ? (
-          <p>No quiz available for this lesson.</p>
-        ) : !quizStarted ? (
-          <Card className="shadow-soft">
-            <CardHeader>
-              <CardTitle>Knowledge Check Quiz</CardTitle>
-              <CardDescription>
-                Test your understanding with {quiz.quiz_questions.length}{" "}
-                questions
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex items-center gap-4">
-                  <div className="text-2xl">🧠</div>
-                  <div>
-                    <p className="font-medium">Ready to test your knowledge?</p>
-                    <p className="text-sm text-muted-foreground">
-                      You need 70% or higher to pass
-                    </p>
-                  </div>
-                </div>
-                <Button
-                  variant="gradient"
-                  onClick={() => setQuizStarted(true)}
-                  size="lg"
-                >
-                  Start Quiz
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        ) : quiz.quiz_questions.length == 0 ? (
+      <div className="max-w-6xl mx-auto px-6 py-8">
+        {quiz.quiz_questions.length == 0 ? (
           <p> There are no questions for this quiz</p>
         ) : (
           <Card className="shadow-soft">

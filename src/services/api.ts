@@ -13,8 +13,8 @@ import {
   AIAssistRequest,
   AIAssistResponse,
   QuizSubmission,
-  StudentDashboardStats, 
   SubjectDetail,
+  QuizAttemptOut,
 } from "@/types/api";
 
 import axios from "axios";
@@ -147,7 +147,7 @@ export async function getQuiz(
 
 export async function getQuizAttempts(
   lessonId: string
-): Promise<QuizAttempt[] | []> {
+): Promise<QuizAttemptOut[] | []> {
   const response = await api.get(
     `/lessons/${lessonId}/attempts/`
   );

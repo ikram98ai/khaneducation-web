@@ -11,9 +11,23 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Terminal } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { QuizAttemptDetail } from "./QuizAttemptDetail";
+import { useState } from "react";
+import {  QuizAttemptOut } from "@/types/api";
 
 export const QuizAttempts = ({ lessonId }: { lessonId: string }) => {
   const navigate = useNavigate();
+  const [selectedAttempt, setSelectedAttempt] = useState<QuizAttemptOut | null>(
+    null
+  );
+
 
   const {
     data: quizAttempts,
@@ -25,7 +39,11 @@ export const QuizAttempts = ({ lessonId }: { lessonId: string }) => {
     navigate(`/lessons/${lessonId}/quiz/`, { replace: true });
   };
 
-  if (isAttemptsLoading) {
+  const handleReviewClick = (attempt: QuizAttemptOut) => {
+    setSelectedAttempt(attempt);
+  };
+
+  if (isAttemptsLoading ) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-background via-accent/5 to-primary/5 p-6">
         <Skeleton className="h-10 w-48 mb-8" />
@@ -81,7 +99,9 @@ export const QuizAttempts = ({ lessonId }: { lessonId: string }) => {
       )}
 
       <div className="mt-8">
-        <h3 className="text-lg font-bold mb-4">Your Quiz History</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-bold">Your Quiz History</h3>
+        </div>
         {isAttemptsLoading ? (
           <p>Loading history...</p>
         ) : isAttemptsError ? (
@@ -113,9 +133,25 @@ export const QuizAttempts = ({ lessonId }: { lessonId: string }) => {
                       {attempt.ai_feedback}
                     </p>
                   </div>
-                  <Button variant="outline" size="sm">
-                    Review
-                  </Button>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleReviewClick(attempt)}
+                      >
+                        Review
+                      </Button>
+                    </DialogTrigger>
+                    {selectedAttempt && (
+                      <DialogContent className="max-w-3xl">
+                        <DialogHeader>
+                          <DialogTitle>Quiz Attempt Details</DialogTitle>
+                        </DialogHeader>
+                        <QuizAttemptDetail attempt={selectedAttempt} />
+                      </DialogContent>
+                    )}
+                  </Dialog>
                 </CardContent>
               </Card>
             ))}
