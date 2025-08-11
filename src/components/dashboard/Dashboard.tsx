@@ -136,19 +136,23 @@ export const Dashboard = () => {
           </Card>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div>
           {/* Enrolled Subjects */}
+          <h2 className="text-2xl font-bold mb-6">Your Subjects</h2>
           <div
-            className="animate-slide-up-fade"
+            className="animate-slide-up-fade col-span-1 grid grid-cols-1 lg:grid-cols-2 gap-4"
             style={{ animationDelay: "0.6s" }}
           >
-            <h2 className="text-2xl font-bold mb-6">Your Subjects</h2>
             {enrolledSubjects.map((subject, index) => (
-              <Link to={`/subjects/${subject.id}`} key={subject.id}>
+              <Link
+                to={`/subjects/${subject.id}`}
+                key={subject.id}
+                className=""
+              >
                 <Card
                   key={subject.id}
                   variant="interactive"
-                  className="animate-spring-in my-4"
+                  className="animate-spring-in mb-4"
                   style={{ animationDelay: `${0.8 + index * 0.1}s` }}
                 >
                   <CardContent className="p-6">

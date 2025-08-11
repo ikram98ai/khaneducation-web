@@ -49,6 +49,8 @@ export const LessonTasks = ({ lessonId }: { lessonId: string }) => {
           <p>Loading practice problems...</p>
         ) : isTasksError ? (
           <p>Error loading practice problems.</p>
+        ) : practiceTasks.length === 0 ? (
+          <p>There is no practice tasks for this lesson.</p>
         ) : (
           practiceTasks.map((task, index) => (
             <Card key={task.id} className="shadow-soft text-wrap">

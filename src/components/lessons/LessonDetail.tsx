@@ -91,9 +91,6 @@ export const LessonDetail = () => {
             <Badge className="bg-white/20 text-white border-white/30">
               {lesson.language}
             </Badge>
-            <span className="text-blue-100">
-              • Progress: {lesson.progress || 0}%
-            </span>
           </div>
         </div>
       </div>

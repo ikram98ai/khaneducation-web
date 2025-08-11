@@ -74,8 +74,7 @@ export const QuizAttempts = ({ lessonId }: { lessonId: string }) => {
 
   return (
     <>
-      {quizAttempts &&
-      quizAttempts.some((attempt) => attempt.passed === true) ? (
+      {(quizAttempts || []).some((attempt) => attempt.passed === true) ? (
         <></>
       ) : (
         <Card className="shadow-soft">
@@ -107,16 +106,37 @@ export const QuizAttempts = ({ lessonId }: { lessonId: string }) => {
         ) : isAttemptsError ? (
           <p>Could not load history.</p>
         ) : quizAttempts && quizAttempts.length > 0 ? (
-          <div className="space-y-4">
+          <div className="space-y-2">
             {quizAttempts.map((attempt) => (
               <Card key={attempt.id} className="shadow-soft">
-                <CardContent className="p-4 flex items-center justify-between">
-                  <div>
+                <CardContent className="p-4 flex flex-col">
+                  <div className="flex items-center justify-between">
                     <p className="font-semibold">
                       Quiz Attempt on{" "}
                       {new Date(attempt.start_time).toLocaleString()}
                     </p>
-
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleReviewClick(attempt)}
+                        >
+                          Review
+                        </Button>
+                      </DialogTrigger>
+                      {selectedAttempt && (
+                        <DialogContent className="max-w-3xl">
+                          <DialogHeader>
+                            <DialogTitle>Quiz Attempt Details</DialogTitle>
+                          </DialogHeader>
+                          <QuizAttemptDetail attempt={selectedAttempt} />
+                        </DialogContent>
+                      )}
+                    </Dialog>
+                  </div>
+                  </CardContent>
+                  <div  className="p-4">
                     <p className="text-sm">
                       Quiz Version • {attempt.quiz_version}
                     </p>
@@ -128,31 +148,11 @@ export const QuizAttempts = ({ lessonId }: { lessonId: string }) => {
                       {attempt.passed ? "Passed" : "Failed"} • Score:{" "}
                       {attempt.score}%
                     </p>
-                    <p className="text-sm">
+                    <p className="text-sm mt-2">
                       <span className="font-bold">AI Feedback: </span>
                       {attempt.ai_feedback}
                     </p>
                   </div>
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleReviewClick(attempt)}
-                      >
-                        Review
-                      </Button>
-                    </DialogTrigger>
-                    {selectedAttempt && (
-                      <DialogContent className="max-w-3xl">
-                        <DialogHeader>
-                          <DialogTitle>Quiz Attempt Details</DialogTitle>
-                        </DialogHeader>
-                        <QuizAttemptDetail attempt={selectedAttempt} />
-                      </DialogContent>
-                    )}
-                  </Dialog>
-                </CardContent>
               </Card>
             ))}
           </div>
