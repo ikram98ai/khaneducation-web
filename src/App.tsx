@@ -6,38 +6,45 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import { AuthForm } from "./components/auth/AuthForm";
-import { ProfileSetup } from "./components/profile/ProfileSetup";
+import { CreateProfile } from "./components/profile/CreateProfile";
 import { Dashboard } from "./components/dashboard/Dashboard";
 import { SubjectDetail } from "./components/subjects/SubjectDetail";
 import { LessonDetail } from "./components/lessons/LessonDetail";
 import { AdminDashboard } from "./components/admin/AdminDashboard";
 import { useAuthStore } from "./stores/authStore";
 import { QuizPage } from "./components/quiz/QuizPage";
+import { ProfilePage } from "./components/profile/ProfilePage";
 
 const App = () => {
   const { profile } = useAuthStore();
-  const isAdmin = profile?.user?.role === 'admin';
+  const isAdmin = profile?.user?.role === "admin";
 
   return (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/login" element={<AuthForm />} />
-            <Route path="/profile-setup" element={<ProfileSetup />} />
-            <Route element={<ProtectedRoute />}>
-              <Route path="/subjects/:subjectId"  element={<SubjectDetail />} />
-              <Route path="/subjects/:subjectId/lessons/:lessonId" element={<LessonDetail />} />
-              <Route path="/lessons/:lessonId/quiz/" element={<QuizPage />} />
-              <Route path="/dashboard" element={isAdmin? <AdminDashboard/> : <Dashboard />} />              
-            </Route>
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-            
-          </Routes>
-        </BrowserRouter>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/login" element={<AuthForm />} />
+          <Route path="/profile-setup" element={<CreateProfile />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/subjects/:subjectId" element={<SubjectDetail />} />
+            <Route
+              path="/subjects/:subjectId/lessons/:lessonId"
+              element={<LessonDetail />}
+            />
+            <Route path="/lessons/:lessonId/quiz/" element={<QuizPage />} />
+            <Route
+              path="/dashboard"
+              element={isAdmin ? <AdminDashboard /> : <Dashboard />}
+            />
+            <Route path="/profile/" element={<ProfilePage />} />
+          </Route>
+          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
     </TooltipProvider>
   );
 };

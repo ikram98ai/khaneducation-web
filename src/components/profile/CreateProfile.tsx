@@ -1,9 +1,25 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { useCreateProfile, useLanguages, useStudentProfile } from "@/hooks/useApiQueries";
+import {
+  useCreateProfile,
+  useLanguages,
+  useStudentProfile,
+} from "@/hooks/useApiQueries";
 import { useNavigate } from "react-router-dom";
 import { Skeleton } from "../ui/skeleton";
 import { useAuthStore } from "@/stores/authStore";
@@ -23,17 +39,25 @@ const grades = [
   { code: "12", name: "Grade 12" },
 ];
 
-export const ProfileSetup = () => {
+export const CreateProfile = () => {
   const [formData, setFormData] = useState({
-    language: '',
-    current_grade: ''
+    language: "",
+    current_grade: "",
   });
-  
+
   const navigate = useNavigate();
   const { setProfile } = useAuthStore();
   const createProfileMutation = useCreateProfile();
-  const { data: languages, isLoading: languagesLoading, error: languagesError } = useLanguages();
-  const { data: existingProfile, isLoading: profileLoading, error: profileError } = useStudentProfile();
+  const {
+    data: languages,
+    isLoading: languagesLoading,
+    error: languagesError,
+  } = useLanguages();
+  const {
+    data: existingProfile,
+    isLoading: profileLoading,
+    error: profileError,
+  } = useStudentProfile();
 
   // Check if profile already exists and redirect to dashboard
   useEffect(() => {
@@ -45,11 +69,11 @@ export const ProfileSetup = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.language || !formData.current_grade) {
       return;
     }
-    
+
     try {
       const profile = await createProfileMutation.mutateAsync(formData);
       if (profile) {
@@ -82,7 +106,9 @@ export const ProfileSetup = () => {
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-background to-accent/20 p-4">
         <Card className="shadow-large border-0">
           <CardContent className="text-center p-6">
-            <p className="text-red-500">Error loading languages. Please try again later.</p>
+            <p className="text-red-500">
+              Error loading languages. Please try again later.
+            </p>
           </CardContent>
         </Card>
       </div>
@@ -109,9 +135,11 @@ export const ProfileSetup = () => {
             <CardContent className="space-y-6">
               <div>
                 <Label htmlFor="language">Preferred Language</Label>
-                <Select 
-                  value={formData.language} 
-                  onValueChange={(value) => setFormData(prev => ({ ...prev, language: value }))}
+                <Select
+                  value={formData.language}
+                  onValueChange={(value) =>
+                    setFormData((prev) => ({ ...prev, language: value }))
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select your language" />
@@ -128,9 +156,11 @@ export const ProfileSetup = () => {
 
               <div>
                 <Label htmlFor="grade">Current Grade Level</Label>
-                <Select 
-                  value={formData.current_grade} 
-                  onValueChange={(value) => setFormData(prev => ({ ...prev, current_grade: value }))}
+                <Select
+                  value={formData.current_grade}
+                  onValueChange={(value) =>
+                    setFormData((prev) => ({ ...prev, current_grade: value }))
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select your grade" />
@@ -152,9 +182,15 @@ export const ProfileSetup = () => {
                 variant="gradient"
                 size="lg"
                 className="w-full"
-                disabled={!formData.language || !formData.current_grade || createProfileMutation.isPending}
+                disabled={
+                  !formData.language ||
+                  !formData.current_grade ||
+                  createProfileMutation.isPending
+                }
               >
-                {createProfileMutation.isPending ? "Setting up..." : "Complete Setup"}
+                {createProfileMutation.isPending
+                  ? "Setting up..."
+                  : "Complete Setup"}
               </Button>
             </CardContent>
           </form>

@@ -10,6 +10,8 @@ import {
   getSubject,
   createStudentProfile,
   getStudentProfile,
+  updateUserProfile,
+  updateStudentProfile,
   getLesson,
   getQuiz,
   submitQuiz,
@@ -126,6 +128,59 @@ export const useStudentProfile = () => {
     queryKey: ["student-profile"],
     queryFn: getStudentProfile,
     enabled: isAuthenticated,
+  });
+};
+
+export const useUpdateUserProfile = () => {
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+
+  return useMutation({
+    mutationFn: (profileData: {
+      first_name: string;
+      last_name: string;
+      email: string;
+    }) => updateUserProfile(profileData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["student-profile"] });
+      toast({
+        title: "Profile Updated",
+        description: "Your profile has been updated successfully.",
+      });
+    },
+    onError: (error: AxiosError) => {
+      toast({
+        title: "Profile Update Failed",
+        description:
+          error.message || "Unable to update profile. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+};
+
+export const useUpdateStudentProfile = () => {
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+
+  return useMutation({
+    mutationFn: (profileData: { language: string }) =>
+      updateStudentProfile(profileData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["student-profile"] });
+      toast({
+        title: "Profile Updated",
+        description: "Your profile has been updated successfully.",
+      });
+    },
+    onError: (error: AxiosError) => {
+      toast({
+        title: "Profile Update Failed",
+        description:
+          error.message || "Unable to update profile. Please try again.",
+        variant: "destructive",
+      });
+    },
   });
 };
 

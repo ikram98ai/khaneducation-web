@@ -85,6 +85,22 @@ export async function getStudentProfile(): Promise<StudentProfile> {
   return response.data;
 }
 
+export async function updateUserProfile(profileData: {
+  first_name: string;
+  last_name: string;
+  email: string;
+}): Promise<User> {
+  const response = await api.put("/users/profile/me/", profileData);
+  return response.data;
+}
+
+export async function updateStudentProfile(profileData: {
+  language: string;
+}): Promise<StudentProfile> {
+  const response = await api.put("/users/profile/me/student", profileData);
+  return response.data;
+}
+
 
 
 // Language APIs
