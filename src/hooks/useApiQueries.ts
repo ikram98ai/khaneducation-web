@@ -57,7 +57,7 @@ export const useLogin = () => {
       setLoading(false);
       toast({
         title: "Login Failed",
-        description: error.message || "Invalid credentials. Please try again.",
+        description: (error.response?.data as { detail: string })?.detail || "Invalid credentials. Please try again.",
         variant: "destructive",
       });
     },
@@ -88,7 +88,8 @@ export const useRegister = () => {
       toast({
         title: "Registration Failed",
         description:
-          error.message || "Unable to create account. Please try again.",
+          (error.response?.data as { detail: string })?.detail ||
+          "Unable to create account. Please try again.",
         variant: "destructive",
       });
     },
@@ -114,7 +115,8 @@ export const useCreateProfile = () => {
       toast({
         title: "Profile Creation Failed",
         description:
-          error.message || "Unable to create profile. Please try again.",
+          (error.response?.data as { detail: string })?.detail ||
+          "Unable to create profile. Please try again.",
         variant: "destructive",
       });
     },
@@ -152,7 +154,8 @@ export const useUpdateUserProfile = () => {
       toast({
         title: "Profile Update Failed",
         description:
-          error.message || "Unable to update profile. Please try again.",
+          (error.response?.data as { detail: string })?.detail ||
+          "Unable to update profile. Please try again.",
         variant: "destructive",
       });
     },
@@ -177,7 +180,8 @@ export const useUpdateStudentProfile = () => {
       toast({
         title: "Profile Update Failed",
         description:
-          error.message || "Unable to update profile. Please try again.",
+          (error.response?.data as { detail: string })?.detail ||
+          "Unable to update profile. Please try again.",
         variant: "destructive",
       });
     },
@@ -263,7 +267,8 @@ export const useSubmitQuiz = () => {
       toast({
         title: "Quiz Submission Failed",
         description:
-          error.message || "Unable to submit quiz. Please try again.",
+          (error.response?.data as { detail: string })?.detail ||
+          "Unable to submit quiz. Please try again.",
         variant: "destructive",
       });
     },
@@ -310,7 +315,8 @@ export const useAiAssistance = () => {
       toast({
         title: "AI Assistant Error",
         description:
-          error.message || "Unable to get AI assistance. Please try again.",
+          (error.response?.data as { detail: string })?.detail ||
+          "Unable to get AI assistance. Please try again.",
         variant: "destructive",
       });
     },
