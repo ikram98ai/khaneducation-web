@@ -143,31 +143,31 @@ export const QuizPage = () => {
 
   // Header Component
   const QuizHeader = () => (
-    <div className="bg-gradient-primary text-white px-6 py-8">
-      <div className="max-w-6xl mx-auto px-6 py-6">
-        <div className="flex items-center justify-between">
+    <div className="bg-gradient-primary text-white px-4 sm:px-6 py-4">
+      <div className="max-w-6xl mx-auto">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <Button
               variant="ghost"
               onClick={onBack}
-              className="text-white hover:bg-white/20"
+              className="text-white hover:bg-white/20 px-2 sm:px-4"
               disabled={isSubmitting}
             >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Lesson
+              <ArrowLeft className="h-4 w-4 sm:mr-2" />
+              <span className="hidden sm:inline">Back to Lesson</span>
             </Button>
-            <div className="h-8 w-px bg-white/30" />
+            <div className="h-8 w-px bg-white/30 hidden sm:block" />
             <div className="flex items-center gap-2">
               <Brain className="h-6 w-6" />
-              <h1 className="text-xl font-semibold">Knowledge Quiz</h1>
+              <h1 className="text-lg sm:text-xl font-semibold">Knowledge Quiz</h1>
             </div>
           </div>
           
           {quizStarted && quiz && (
-            <div className="flex items-center gap-6 text-sm">
+            <div className="flex items-center justify-between w-full sm:w-auto gap-4 text-sm">
               <div className="flex items-center gap-2">
                 <CheckCircle className="h-4 w-4" />
-                <span>{getAnsweredCount()}/{quiz.quiz_questions.length} answered</span>
+                <span>{getAnsweredCount()}/{quiz.quiz_questions.length}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Clock className="h-4 w-4" />
@@ -181,9 +181,9 @@ export const QuizPage = () => {
           <div className="mt-4 p-3 bg-red-500/20 rounded-lg border border-red-300/30">
             <div className="flex items-center gap-2 text-red-100">
               <AlertCircle className="h-4 w-4 flex-shrink-0" />
-              <span className="text-sm">
-                Warning: Leaving this page will automatically submit your quiz
-              </span>
+              <p className="text-xs sm:text-sm">
+                Warning: Leaving this page will automatically submit your quiz.
+              </p>
             </div>
           </div>
         )}
@@ -266,7 +266,7 @@ export const QuizPage = () => {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="flex items-center gap-3 p-4 bg-blue-50 rounded-lg">
                   <CheckCircle className="h-5 w-5 text-blue-600 flex-shrink-0" />
                   <div>
@@ -409,19 +409,19 @@ export const QuizPage = () => {
                 ))}
               </div>
 
-              <div className="flex items-center justify-between pt-6 border-t">
+              <div className="flex flex-col sm:flex-row items-center justify-between pt-6 border-t gap-4 sm:gap-0">
                 <Button
                   variant="outline"
                   onClick={previousQuestion}
                   disabled={currentQuestion === 0 || isSubmitting}
-                  className="flex items-center gap-2"
+                  className="w-full sm:w-auto flex items-center gap-2"
                 >
                   <ArrowLeft className="h-4 w-4" />
                   Previous
                 </Button>
 
-                <div className="text-sm text-gray-500">
-                  {getAnsweredCount()} of {quiz.quiz_questions.length} questions answered
+                <div className="text-sm text-gray-500 order-first sm:order-none">
+                  {getAnsweredCount()} of {quiz.quiz_questions.length} answered
                 </div>
 
                 <Button
@@ -430,7 +430,7 @@ export const QuizPage = () => {
                     !selectedAnswers[quiz.quiz_questions[currentQuestion].question_id] || 
                     isSubmitting
                   }
-                  className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700"
+                  className="w-full sm:w-auto flex items-center gap-2 bg-blue-600 hover:bg-blue-700"
                 >
                   {isSubmitting ? (
                     "Submitting..."
