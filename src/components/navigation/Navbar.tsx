@@ -10,9 +10,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuthStore } from "@/stores/authStore";
+import { useState } from "react";
+import { SettingsModal } from "./SettingsModal";
 
 export function Navbar() {
   const { isAuthenticated, isLoading, profile } = useAuthStore();
+  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
+
+  const openSettingsModal = () => setIsSettingsModalOpen(true);
+  const closeSettingsModal = () => setIsSettingsModalOpen(false);
+
   return (
     <header className="flex h-16 items-center justify-between px-4 md:px-6 max-w-6xl mx-auto bg-gradient-to-br from-background via-accent/5 to-primary/5">
       <div className="flex items-center gap-4">
@@ -48,13 +55,13 @@ export function Navbar() {
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <a href="/profile"> 
-              <DropdownMenuItem>
-                <User className="mr-2 h-4 w-4" />
-                <span> Profile </span>
-              </DropdownMenuItem>
-               </a> 
-              <DropdownMenuItem>
+              <a href="/profile">
+                <DropdownMenuItem>
+                  <User className="mr-2 h-4 w-4" />
+                  <span> Profile </span>
+                </DropdownMenuItem>
+              </a>
+              <DropdownMenuItem onClick={openSettingsModal}>
                 <Settings className="mr-2 h-4 w-4" />
                 <span>Settings</span>
               </DropdownMenuItem>
@@ -67,6 +74,7 @@ export function Navbar() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+      <SettingsModal isOpen={isSettingsModalOpen} onClose={closeSettingsModal} />
     </header>
   );
 }

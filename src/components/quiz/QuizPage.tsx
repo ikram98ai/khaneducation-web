@@ -193,7 +193,7 @@ export const QuizPage = () => {
   // Loading state
   if (isQuizLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50">
+      <div className="min-h-screen">
         <QuizHeader />
         <div className="max-w-4xl mx-auto px-6 py-8">
           <Card className="shadow-lg">
@@ -219,7 +219,7 @@ export const QuizPage = () => {
   // Error state
   if (isQuizError) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50">
+      <div className="min-h-screen">
         <QuizHeader />
         <div className="max-w-4xl mx-auto px-6 py-8 flex items-center justify-center">
           <Alert variant="destructive" className="max-w-lg shadow-lg">
@@ -240,7 +240,7 @@ export const QuizPage = () => {
   // Quiz start screen
   if (!quizStarted) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50">
+      <div className="min-h-screen">
         <QuizHeader />
         <div className="max-w-4xl mx-auto px-6 py-12">
           <div className="text-center mb-8">
@@ -309,7 +309,7 @@ export const QuizPage = () => {
   // No quiz available
   if (!quiz) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50">
+      <div className="min-h-screen">
         <QuizHeader />
         <div className="max-w-4xl mx-auto px-6 py-8 flex items-center justify-center">
           <Alert className="max-w-lg shadow-lg">
@@ -330,7 +330,7 @@ export const QuizPage = () => {
   // Empty quiz
   if (quiz.quiz_questions.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50">
+      <div className="min-h-screen">
         <QuizHeader />
         <div className="max-w-4xl mx-auto px-6 py-8 flex items-center justify-center">
           <Alert className="max-w-lg shadow-lg">
@@ -350,7 +350,7 @@ export const QuizPage = () => {
 
   // Quiz interface
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50">
+    <div className="min-h-screen">
       <QuizHeader />
       
       <div className="max-w-4xl mx-auto px-6 py-8">

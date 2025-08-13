@@ -6,7 +6,8 @@ import { useStudentDashboard } from "@/hooks/useApiQueries";
 import { Link } from "react-router-dom";
 import { Navbar } from "../navigation/Navbar";
 import { Skeleton } from "../ui/skeleton";
-import { Calculator, Atom, FlaskConical, Dna, Code } from "lucide-react";
+import { Calculator, Atom, FlaskConical, Dna, Code, Terminal } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 
 const subjectIcons: { [key: string]: JSX.Element } = {
   Mathematics: <Calculator className="w-6 h-6 text-primary" />,
@@ -16,6 +17,9 @@ const subjectIcons: { [key: string]: JSX.Element } = {
   "Computer Science": <Code className="w-6 h-6 text-primary" />,
 };
 
+ const onBack = () => {
+    window.history.back();
+  };
 export const Dashboard = () => {
   const { data: dashboardData, isLoading, error } = useStudentDashboard();
 
@@ -33,9 +37,26 @@ export const Dashboard = () => {
     );
   }
 
+
   if (error) {
-    return <div>Error loading dashboard data.</div>;
-  }
+      return (
+        <div className="min-h-screen">
+      <Navbar />
+          <div className="max-w-4xl mx-auto px-6 py-8 flex items-center justify-center">
+            <Alert variant="destructive" className="max-w-lg shadow-lg">
+              <Terminal className="h-4 w-4" />
+              <AlertTitle>Error Loading Quiz</AlertTitle>
+              <AlertDescription className="mt-2">
+                There was a problem  fetching the dashboard data. Please check your connection and try again.
+                <Button onClick={onBack} variant="link" className="p-0 h-auto mt-3 text-red-600">
+                  Go Back to Lesson
+                </Button>
+              </AlertDescription>
+            </Alert>
+          </div>
+        </div>
+      );
+    }
 
   const { enrollments: enrolledSubjects, stats } = dashboardData;
 

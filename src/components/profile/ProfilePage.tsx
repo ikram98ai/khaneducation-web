@@ -16,9 +16,7 @@ const userProfileSchema = z.object({
   email: z.string().email("Invalid email address"),
 });
 
-const studentProfileSchema = z.object({
-  language: z.string(),
-});
+
 
 export const ProfilePage = () => {
   const { data: profile, isLoading, error } = useStudentProfile();
@@ -35,20 +33,13 @@ export const ProfilePage = () => {
     },
   });
 
-  const { register: registerStudent, handleSubmit: handleStudentSubmit, setValue: setStudentValue } = useForm({
-    resolver: zodResolver(studentProfileSchema),
-    values: {
-      language: profile?.student_profile?.language || "",
-    },
-  });
+  
 
   const onUserSubmit = (data: any) => {
     updateUserProfileMutation.mutate(data);
   };
 
-  const onStudentSubmit = (data: any) => {
-    updateStudentProfileMutation.mutate(data);
-  };
+  
 
   if (isLoading) {
     return (
@@ -154,46 +145,15 @@ export const ProfilePage = () => {
                       </p>
                     )}
                   </div>
-                  <Button type="submit" disabled={updateUserProfileMutation.isLoading}>
-                    {updateUserProfileMutation.isLoading
+                  <Button type="submit" disabled={updateUserProfileMutation.isPending}>
+                    {updateUserProfileMutation.isPending
                       ? "Saving..."
                       : "Save Changes"}
                   </Button>
                 </form>
               </CardContent>
             </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Edit Student Profile</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={handleStudentSubmit(onStudentSubmit)} className="space-y-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="language">Language</Label>
-                    <Select
-                      onValueChange={(value) => setStudentValue("language", value)}
-                      defaultValue={profile?.student_profile?.language}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a language" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {languages?.map((lang: string) => (
-                          <SelectItem key={lang} value={lang}>
-                            {lang}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <Button type="submit" disabled={updateStudentProfileMutation.isLoading}>
-                    {updateStudentProfileMutation.isLoading
-                      ? "Saving..."
-                      : "Save Changes"}
-                  </Button>
-                </form>
-              </CardContent>
-            </Card>
+            
           </div>
         </div>
       </div>
