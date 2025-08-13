@@ -58,7 +58,7 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
             <Switch
               id="theme-mode"
               checked={theme === "dark"}
-              onCheckedChange={() => setTheme(theme === "light" ? "light" : "dark")}
+              onCheckedChange={() => setTheme(theme === "dark" ? "light" : "dark")}
             />
           </div>
           <form onSubmit={handleStudentSubmit(onStudentSubmit)} className="space-y-6">

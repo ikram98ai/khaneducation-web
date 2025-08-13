@@ -8,6 +8,7 @@ import { AIAssistant } from "../learning/AIAssistant";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Terminal } from "lucide-react";
+import { Navbar } from "../navigation/Navbar";
 
 export const SubjectDetail = () => {
   const { subjectId } = useParams();
@@ -56,24 +57,27 @@ export const SubjectDetail = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-accent/5 to-primary/5">
       {/* Header */}
-      <div className="bg-gradient-primary text-white px-6 py-8">
+      <Navbar />
+      
+      <div className="px-6 py-8">
         <div className="max-w-6xl mx-auto">
           <Button
+          variant="link"
             onClick={onBack}
-            className="text-white hover:font-bold mb-4"
+            className=" hover:font-bold mb-4"
           >
             ← Back to Dashboard
           </Button>
           <h1 className="text-3xl font-bold mb-2">{subject.name}</h1>
-          <p className="text-blue-100 mb-4">{subject.description}</p>
+          <p className="mb-4">{subject.description}</p>
           <div className="flex items-center gap-3">
-            <Badge className="bg-white/20 text-white border-white/30">
+            <Badge className="border-white/30">
               GR{subject.grade_level}
             </Badge>
-           {subject.lessons && <Badge className="bg-white/20 text-white border-white/30">
+           {subject.lessons && <Badge className="border-white/30">
               {subject.lessons[0].language}
             </Badge>}
-            <span className="text-blue-100">
+            <span className="">
               • {subject.total_lessons} Lessons
             </span>
           </div>
