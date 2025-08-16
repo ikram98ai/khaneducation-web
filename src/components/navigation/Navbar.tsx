@@ -14,7 +14,7 @@ import { useState } from "react";
 import { SettingsModal } from "./SettingsModal";
 
 export function Navbar() {
-  const { isAuthenticated, isLoading, profile } = useAuthStore();
+  const { isLoading, profile } = useAuthStore();
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
 
   const openSettingsModal = () => setIsSettingsModalOpen(true);
@@ -27,13 +27,13 @@ export function Navbar() {
           <img
             src="/logo.png"
             alt="khan education logo"
-            className="h-16 w-16"
+            className="h-10 w-10 md:h-16 md:w-16"
           />
-          <span className="text-lg font-bold">Khan Education</span>
+          <span className="text-sm md:text-lg font-bold">Khan Education</span>
         </a>
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center md:gap-4">
         <Button variant="ghost" size="icon" className="rounded-full">
           <Bell className="h-6 w-6" />
         </Button>

@@ -150,7 +150,6 @@ export const QuizPage = () => {
   // Header Component
   const QuizHeader = () => (
     <div className="py-4">
-      <Navbar />
       <div className="max-w-6xl mx-auto px-4 md:px-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-center gap-4">
@@ -182,8 +181,8 @@ export const QuizPage = () => {
         </div>
 
         {quizStarted && (
-          <div className="mt-4 p-3 bg-red-500/20 dark:bg-red-800/20 rounded-lg border dark:border-red-700/30 border-red-300/30">
-            <div className="flex items-center gap-2 text-red-100 dark:text-red-300">
+          <div className="mt-4 p-3 bg-red-500/50 dark:bg-red-800/20 rounded-lg border dark:border-red-700/30 border-red-300/30">
+            <div className="flex items-center gap-2 text-white dark:text-red-300">
               <AlertCircle className="h-4 w-4 flex-shrink-0" />
               <p className="text-xs sm:text-sm">
                 Warning: Leaving this page will automatically submit your quiz.

@@ -4,7 +4,6 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { useStudentDashboard } from "@/hooks/useApiQueries";
 import { Link } from "react-router-dom";
-import { Navbar } from "../navigation/Navbar";
 import { Skeleton } from "../ui/skeleton";
 import { Calculator, Atom, FlaskConical, Dna, Code, Terminal } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
@@ -17,8 +16,8 @@ const subjectIcons: { [key: string]: JSX.Element } = {
   "Computer Science": <Code className="w-6 h-6 text-primary" />,
 };
 
- const onBack = () => {
-    window.history.back();
+ const onRefresh = () => {
+    window.location.reload();
   };
 export const Dashboard = () => {
   const { data: dashboardData, isLoading, error } = useStudentDashboard();
@@ -41,15 +40,14 @@ export const Dashboard = () => {
   if (error) {
       return (
         <div className="min-h-screen">
-      <Navbar />
           <div className="max-w-4xl mx-auto px-6 py-8 flex items-center justify-center">
             <Alert variant="destructive" className="max-w-lg shadow-lg">
               <Terminal className="h-4 w-4" />
               <AlertTitle>Error Loading Quiz</AlertTitle>
               <AlertDescription className="mt-2">
                 There was a problem  fetching the dashboard data. Please check your connection and try again.
-                <Button onClick={onBack} variant="link" className="p-0 h-auto mt-3 text-red-600">
-                  Go Back to Lesson
+                <Button onClick={onRefresh} variant="link" className="p-0 h-auto mt-3 text-red-600">
+                  Refresh the page.
                 </Button>
               </AlertDescription>
             </Alert>
@@ -65,7 +63,6 @@ export const Dashboard = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-accent/5 to-primary/5">
       {/* Header */}
-      <Navbar />
 
       <div className="max-w-6xl mx-auto px-6 py-8">
         {/* Stats Overview with staggered animations */}
@@ -200,7 +197,7 @@ export const Dashboard = () => {
 
                         <div className="flex items-center gap-2 mb-3">
                           <Badge variant="secondary">
-                            GR{subject.grade_level}
+                            Grade {subject.grade_level}
                           </Badge>
                         </div>
 

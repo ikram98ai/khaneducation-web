@@ -18,7 +18,6 @@ import MarkdownViewer from "../mdviewer/MarkdownViewer";
 import { Badge } from "../ui/badge";
 import { QuizAttempts } from "./QuizAttempts";
 import { LessonTasks } from "./LessonTasks";
-import { Navbar } from "../navigation/Navbar";
 
 export const LessonDetail = () => {
   const { subjectId, lessonId } = useParams();
@@ -74,7 +73,6 @@ export const LessonDetail = () => {
 
   return (
     <div className="bg-gradient-to-br from-background via-accent/5 to-primary/5">
-      <Navbar />
       {/* Header */}
       <div className="py-8">
         <div className="max-w-6xl mx-auto px-4 md:px-6">
@@ -83,7 +81,7 @@ export const LessonDetail = () => {
           </Button>
           <h1 className="text-3xl font-bold mb-2">{lesson.title}</h1>
           <div className="flex items-center gap-3">
-            <Badge className=" border-white/30">GR{subject.grade_level}</Badge>
+            <Badge className=" border-white/30">Grade {subject.grade_level}</Badge>
             <Badge className=" border-white/30">{lesson.language}</Badge>
           </div>
         </div>

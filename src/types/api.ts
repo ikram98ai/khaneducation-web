@@ -41,8 +41,19 @@ export interface Lesson {
   progress?: number;
 }
 
+interface SubjectLesson {
+  id: string;
+  title: string;
+  language: "Arabic" | "English" | "Pashto" | "Persian" | "Urdu";
+  order_in_subject?: number;
+  quiz_attempts: number;
+  is_completed:boolean  
+  progress?: number;
+}
+
+
 export interface SubjectDetail extends Subject {
-  lessons?: Lesson[];
+  lessons?: SubjectLesson[];
 }
 
 export interface Question {

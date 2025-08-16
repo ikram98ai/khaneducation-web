@@ -8,7 +8,6 @@ import { AIAssistant } from "../learning/AIAssistant";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Terminal } from "lucide-react";
-import { Navbar } from "../navigation/Navbar";
 
 export const SubjectDetail = () => {
   const { subjectId } = useParams();
@@ -57,7 +56,6 @@ export const SubjectDetail = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-accent/5 to-primary/5">
       {/* Header */}
-      <Navbar />
       
       <div className="py-8">
         <div className="max-w-6xl mx-auto px-4 md:px-6">
@@ -72,7 +70,7 @@ export const SubjectDetail = () => {
           <p className="mb-4">{subject.description}</p>
           <div className="flex items-center gap-3">
             <Badge className="border-white/30">
-              GR{subject.grade_level}
+              Grade {subject.grade_level}
             </Badge>
            {subject.lessons && <Badge className="border-white/30">
               {subject.lessons[0].language}
@@ -133,14 +131,14 @@ export const SubjectDetail = () => {
                       <div className="flex items-center gap-3 mb-2">
                         <div
                           className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-                            lesson.progress === 100
+                            lesson.is_completed
                               ? "bg-success text-success-foreground"
                               : lesson.progress > 0
                               ? "bg-warning text-warning-foreground"
                               : "bg-muted text-muted-foreground"
                           }`}
                         >
-                          {lesson.progress === 100 ? "✓" : lesson.order_in_subject}
+                          {lesson.is_completed ? "✓" : lesson.order_in_subject}
                         </div>
                         <h3 className="text-lg font-semibold">
                           {lesson.title}
@@ -148,7 +146,7 @@ export const SubjectDetail = () => {
                       </div>
 
                       <p className="text-muted-foreground mb-4 ml-11">
-                        {lesson.content.slice(0, 50)}
+                        Quiz attempts: {lesson.quiz_attempts}
                       </p>
 
                       {/* <div className="flex items-center gap-4 mb-3 ml-11">
@@ -161,7 +159,7 @@ export const SubjectDetail = () => {
                       {lesson.progress >= 0 && (
                         <div className="ml-11">
                           <div className="flex justify-between text-sm mb-1">
-                            <span>Progress</span>
+                            <span>Score</span>
                             <span>{lesson.progress||0}%</span>
                           </div>
                           <Progress
@@ -174,7 +172,7 @@ export const SubjectDetail = () => {
 
                     <Button
                       variant={
-                        lesson.progress === 100
+                        lesson.is_completed 
                           ? "secondary"
                           : lesson.progress > 0
                           ? "outline"
@@ -182,7 +180,7 @@ export const SubjectDetail = () => {
                       }
                       size="sm"
                     >
-                      {lesson.progress === 100
+                      {lesson.is_completed 
                         ? "Review"
                         : lesson.progress > 0
                         ? "Continue"

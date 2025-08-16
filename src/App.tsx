@@ -14,6 +14,7 @@ import { AdminDashboard } from "./components/admin/AdminDashboard";
 import { useAuthStore } from "./stores/authStore";
 import { QuizPage } from "./components/quiz/QuizPage";
 import { ProfilePage } from "./components/profile/ProfilePage";
+import { Navbar } from "./components/navigation/Navbar";
 
 const App = () => {
   const { profile } = useAuthStore();
@@ -23,6 +24,7 @@ const App = () => {
     <TooltipProvider>
       <Toaster />
       <Sonner />
+      <Navbar />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />

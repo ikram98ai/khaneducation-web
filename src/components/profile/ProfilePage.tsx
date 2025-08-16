@@ -44,7 +44,6 @@ export const ProfilePage = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-background via-accent/5 to-primary/5 p-6">
-        <Navbar />
         <div className="max-w-4xl mx-auto py-8">
           <Skeleton className="h-10 w-48 mb-8" />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -66,7 +65,6 @@ export const ProfilePage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-accent/5 to-primary/5">
-      <Navbar />
       <div className="max-w-4xl mx-auto py-8 px-4 md:px-0">
         <h1 className="text-3xl font-bold mb-8">Your Profile</h1>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
