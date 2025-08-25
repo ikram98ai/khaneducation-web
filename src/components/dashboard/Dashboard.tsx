@@ -43,7 +43,7 @@ export const Dashboard = () => {
           <div className="max-w-4xl mx-auto px-6 py-8 flex items-center justify-center">
             <Alert variant="destructive" className="max-w-lg shadow-lg">
               <Terminal className="h-4 w-4" />
-              <AlertTitle>Error Loading Quiz</AlertTitle>
+              <AlertTitle>Error Loading Dashboard</AlertTitle>
               <AlertDescription className="mt-2">
                 There was a problem  fetching the dashboard data. Please check your connection and try again.
                 <Button onClick={onRefresh} variant="link" className="p-0 h-auto mt-3 text-red-600">
